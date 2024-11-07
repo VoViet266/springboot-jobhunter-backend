@@ -33,34 +33,49 @@ public class companyController {
     public ResponseEntity<Company> getCompanyById(@PathVariable("id") Long id) {
         try {
             Optional<Company> company = companyService.handleGetCompanyById(id);
-          return ResponseEntity.ok().body(company.get());
+            return ResponseEntity
+                    .ok()
+                    .body(company.get());
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            return ResponseEntity
+                    .status(500)
+                    .build();
         }
     }
 
-    @GetMapping("/getcompany")
-    public ResponseEntity<resultPaginationDTO> getCompany(@Filter Specification<Company> specification, Pageable pageable) {
+    @GetMapping("/companies")
+    public ResponseEntity<resultPaginationDTO> getCompany(
+            @Filter Specification<Company> specification,
+            Pageable pageable) {
         try {
-            resultPaginationDTO resultPaginationDTO = companyService.handleGetAllCompany(specification, pageable);
+            resultPaginationDTO resultPaginationDTO = companyService.handleGetAllCompany(
+                    specification,
+                    pageable);
             return ResponseEntity.ok(resultPaginationDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(500)
+                    .build();
         }
-      
-    }
-    @PostMapping("/create")
-    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
-       try {
-           Company newCompany = companyService.handleCreateCompany(company);
-           return ResponseEntity.ok(newCompany);
-       } catch (Exception e) {
-           return ResponseEntity.status(500).build();
-       }
+
     }
 
-    @PutMapping("/update/{id}") 
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
+    @PostMapping("/create")
+    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+        try {
+            Company newCompany = companyService.handleCreateCompany(company);
+            return ResponseEntity.ok(newCompany);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(500)
+                    .build();
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Company> updateCompany(
+        @PathVariable("id") 
+        Long id, 
+        @RequestBody Company company) {
         try {
             Optional<Company> exist = companyService.handleGetCompanyById(id);
             if (exist.isPresent()) {
@@ -73,6 +88,7 @@ public class companyController {
             return ResponseEntity.status(500).build();
         }
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Company> deleteCompany(@PathVariable("id") Long id) {
         try {
@@ -82,5 +98,5 @@ public class companyController {
             return ResponseEntity.notFound().build();
         }
     }
-     
+
 }

@@ -113,18 +113,35 @@ public class AuthController {
         }
 
     }
-
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(){
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        if(email.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        this.userService.updateUserToken("", email);
+        ResponseCookie springCookie = ResponseCookie.from("refresh_token", "")
+        .httpOnly(true)
+        .secure(true)
+        .maxAge(0)
+        .path("/")
+        .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(null);
+    }
+    
     @GetMapping("/account")
-    public ResponseEntity<RestLoginDTO.UserLogin> getAccount(){
+    public ResponseEntity<RestLoginDTO.UserGetAccount> getAccount(){
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User userCurent = this.userService.handleGetUserByEmail(email);
+        RestLoginDTO.UserGetAccount userGetAccount = new RestLoginDTO.UserGetAccount();
         RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin();
         if(userCurent != null){
             userLogin.setId(userCurent.getId());
             userLogin.setEmail(userCurent.getEmail());
             userLogin.setName(userCurent.getUsername());
+            userGetAccount.setUser(userLogin);
         }
-        return ResponseEntity.ok(userLogin);
+        return ResponseEntity.ok(userGetAccount);
     }
     
     

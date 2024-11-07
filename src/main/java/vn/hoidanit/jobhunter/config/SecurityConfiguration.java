@@ -80,8 +80,10 @@ public class SecurityConfiguration {
     // JwtDecoder de giai ma token
     @Bean
     public JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey())
-                .macAlgorithm(SecurityUtil.JWT_ALGORITHM).build();
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
+                .withSecretKey(getSecretKey())
+                .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
+                .build();
         return token -> {
             try {
                 return jwtDecoder.decode(token);

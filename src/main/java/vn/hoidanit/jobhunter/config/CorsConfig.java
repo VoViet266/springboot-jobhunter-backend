@@ -18,9 +18,13 @@ public class CorsConfig  {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedOrigins(
+            Arrays.asList("http://localhost:3000", "http://localhost:4173", "http://localhost:5137")); 
+        configuration.setAllowedMethods(
+            Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // Các header được cho phép truy cập
+        configuration.setAllowedHeaders(
+            Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
