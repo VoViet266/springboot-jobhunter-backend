@@ -37,7 +37,7 @@ public class SecurityUtil {
     @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
-    public String createAccessToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication, RestLoginDTO.UserLogin restLoginDTO) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
@@ -45,7 +45,7 @@ public class SecurityUtil {
                 .subject(authentication.getName())
                 .issuedAt(now)
                 .expiresAt(validity)
-                .claim("hoidanit", authentication)
+                .claim("User", restLoginDTO)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(
@@ -74,5 +74,11 @@ public class SecurityUtil {
                 .map(Authentication::getName);
 
     }
-    
+    // get current user login
+    // public static Optional<String> getCurrentUserJWT() {
+    //     SecurityContext securityContext = SecurityContextHolder.getContext();
+    //     return Optional.ofNullable(securityContext.getAuthentication())
+    //             .map(Authentication::getCredentials)
+    //             .map(Object::toString);
+    // }
 }

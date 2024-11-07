@@ -1,6 +1,5 @@
 package vn.hoidanit.jobhunter.entity;
 
-import java.security.Security;
 import java.time.Instant;
 
 import jakarta.persistence.Column;

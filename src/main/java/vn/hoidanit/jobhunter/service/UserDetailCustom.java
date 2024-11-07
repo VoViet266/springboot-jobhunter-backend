@@ -20,7 +20,7 @@ public UserDetailCustom(vn.hoidanit.jobhunter.service.userService userService) {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        vn.hoidanit.jobhunter.entity.User user = this.userService.handleGetUserByUsername(username);
+        vn.hoidanit.jobhunter.entity.User user = this.userService.handleGetUserByEmail(username);
 
         return new User(
             user.getEmail(),

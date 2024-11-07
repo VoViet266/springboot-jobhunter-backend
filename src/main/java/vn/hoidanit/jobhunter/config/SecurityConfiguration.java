@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -50,8 +51,10 @@ public class SecurityConfiguration {
                 .authorizeRequests(
                         authz -> authz
                                 // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
-                                .requestMatchers("/api/v1/login", "/api/v1/register", "/api/v1/").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
                 ///// .anyRequest().permitAll()
                 //
                 // oauth2ResourceServer() bao mat cac api duoc khai bao trong permitAll de khong
@@ -82,7 +85,7 @@ public class SecurityConfiguration {
         return token -> {
             try {
                 return jwtDecoder.decode(token);
-            } catch (Exception e) {
+            } catch (JwtException e) {
                 System.out.println(">>> JWT Error: " + e.getMessage());
                 throw e;
             }

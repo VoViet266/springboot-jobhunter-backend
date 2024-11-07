@@ -72,13 +72,10 @@ public class userService {
         return false;
     }
 
-    public Optional<User> handleGetUserByEmail(String email) {
-        return Optional.ofNullable(this.userRepository.findByEmail(email));
+    public User handleGetUserByEmail(String email) {
+        return this.userRepository.findByEmail(email);
     }
 
-    public User handleGetUserByUsername(String username) {
-        return this.userRepository.findByEmail(username);
-    }
 
     public User handleUpdateUser(Long id, User updatedUser) {
         User user = this.userRepository.findById(id).get();
