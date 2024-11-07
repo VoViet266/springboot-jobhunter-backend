@@ -82,7 +82,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterReponseDTO> register(@RequestBody RegisterRequestDTO registerDTO) {
-        try {
+   
             // Kiểm tra xem email đã tồn tại
             User existingUserOpt = this.userService.handleGetUserByEmail(registerDTO.getEmail());
             if (existingUserOpt != null) {
@@ -107,10 +107,6 @@ public class AuthController {
             }
 
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RegisterReponseDTO());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RegisterReponseDTO());
-        }
 
     }
     @PostMapping("/logout")
