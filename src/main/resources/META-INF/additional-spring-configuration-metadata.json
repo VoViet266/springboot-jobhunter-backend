@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "hoidanit.jwt.base64-secret",
+    "type": "java.lang.String",
+    "description": "A description for 'hoidanit.jwt.base64-secret'"
+  },
+  {
+    "name": "hoidanit.jwt.token-validity-in-seconds",
+    "type": "java.lang.String",
+    "description": "A description for 'hoidanit.jwt.token-validity-in-seconds'"
+  },
+  {
+    "name": "google.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'google.api.key'"
+  },
+  {
+    "name": "hoidanit.jwt.refresh-token-validity-in-seconds",
+    "type": "java.lang.String",
+    "description": "A description for 'hoidanit.jwt.refresh-token-validity-in-seconds'"
+  },
+  {
+    "name": "hoidanit.jwt.access-token-validity-in-seconds",
+    "type": "java.lang.String",
+    "description": "A description for 'hoidanit.jwt.access-token-validity-in-seconds'"
+  }
+]}
