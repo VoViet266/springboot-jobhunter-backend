@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +25,9 @@ import vn.hoidanit.jobhunter.service.userService;
 @RequestMapping("/api/v1/user")
 public class userController {
     private final userService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    public userController(userService userService, PasswordEncoder passwordEncoder) {
+    public userController(userService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
 
     }
 
@@ -39,33 +36,6 @@ public class userController {
         User user = this.userService.handleGetUserByUsername(email);
         return user;
     }
-    // @PostMapping("/user/create")
-    // public ResponseEntity<?> createUser(@RequestBody Map<String, Object> payload)
-    // {
-    // String username = (String) payload.get("username");
-    // String email = (String) payload.get("email");
-    // String password = (String) payload.get("password");
-    // Long roleId = payload.containsKey("role_id") ? ((Number)
-    // payload.get("role_id")).longValue() : null;
-    // Optional<User> existingUserOpt =
-    // this.userService.handleGetUserByEmail(email);
-
-    // if (existingUserOpt.isPresent()) {
-    // return
-    // ResponseEntity.status(HttpStatus.CONFLICT).body(existingUserOpt.get());
-    // }
-    // User user = new User();
-    // if (roleId != null) {
-    // Role role = this.roleService.findRoleById(roleId).orElse(null);
-    // user.setRole(role);
-    // }
-    // user.setEmail(email);
-    // user.setUsername(username);
-    // user.setPassword(this.passwordEncoder.encode(password));
-
-    // this.userService.handleCreateUser(user); // Lưu user
-    // return ResponseEntity.status(HttpStatus.CREATED).body(user);
-    // }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserByID(@PathVariable("id") Long id) {
@@ -111,12 +81,4 @@ public class userController {
             .body(this.userService.convertToResUpdateUserDTO(User));
      
     }
-
-    // // Tìm tất cả các User có vai trò với id_role tương ứng
-    // @GetMapping("/role/{roleName}")
-    // public ResponseEntity<List<User>> getUsersByRoleId(@PathVariable("roleName")
-    // Long roleName) {
-    // List<User> usersWithRole = this.userService.GetUserByRole(roleName);
-    // return ResponseEntity.ok().body(usersWithRole);
-    // }
 }
