@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turkraft.springfilter.boot.Filter;
 
 import vn.hoidanit.jobhunter.DTO.response.ResUpdateUserDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.resultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.userService;
@@ -30,18 +31,11 @@ public class userController {
         this.userService = userService;
 
     }
-
-    @GetMapping("/email/{email}")
-    public User getEmail(@PathVariable("email") String email) {
-        User user = this.userService.handleGetUserByEmail(email);
-        return user;
-    }
-
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable("id") Long id) {
+    @GetMapping("/users/{id}")
+    public ResponseEntity<ResUserDTO> getUserByID(@PathVariable("id") Long id) {
         try {
             User user = this.userService.handleGetUserByID(id).get();
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -56,7 +50,7 @@ public class userController {
            
     }
 
-    @DeleteMapping("/user/delete/{id}")
+    @DeleteMapping("/users/delete/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") Long id, User user) {
         try {
             this.userService.handleDeleteUser(id);
@@ -66,7 +60,7 @@ public class userController {
         }
     }
 
-    @PutMapping("/updateuser/{id}")
+    @PutMapping("/users/update/{id}")
     public ResponseEntity<ResUpdateUserDTO> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
             Optional<User> existingUserOpt = this.userService.handleGetUserByID(id);
             if (!existingUserOpt.isPresent()) {

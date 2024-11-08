@@ -20,5 +20,16 @@ public class ResUpdateUserDTO {
     private GenderEnum gender;
     private Instant updateAt;
     private String updatedBy;
+    private CompanyUser company;
+
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CompanyUser
+    {
+        private Long id;
+        private String name;
+    }
 
 }
