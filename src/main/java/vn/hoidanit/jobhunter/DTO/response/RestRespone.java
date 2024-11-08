@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.Entity;
+package vn.hoidanit.jobhunter.DTO.response;
 
 
 public class RestRespone<T> {

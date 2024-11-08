@@ -1,7 +1,8 @@
-package vn.hoidanit.jobhunter.DTO;
+package vn.hoidanit.jobhunter.DTO.response;
+
+import java.time.Instant;
 
 import vn.hoidanit.jobhunter.util.constant.GenderEnum;
-import java.time.Instant;
 
 public class RegisterReponseDTO {
 

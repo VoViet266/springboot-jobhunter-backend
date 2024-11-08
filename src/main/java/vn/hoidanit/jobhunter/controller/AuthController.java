@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.hoidanit.jobhunter.DTO.RegisterReponseDTO;
-import vn.hoidanit.jobhunter.DTO.RegisterRequestDTO;
-import vn.hoidanit.jobhunter.DTO.ReqLoginDTO;
-import vn.hoidanit.jobhunter.DTO.ResLoginDTO;
+import vn.hoidanit.jobhunter.DTO.request.RegisterRequestDTO;
+import vn.hoidanit.jobhunter.DTO.request.ReqLoginDTO;
+import vn.hoidanit.jobhunter.DTO.response.RegisterReponseDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResLoginDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.authService;
 import vn.hoidanit.jobhunter.service.userService;

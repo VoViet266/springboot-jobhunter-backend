@@ -8,8 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import vn.hoidanit.jobhunter.DTO.GenerateContentRequest;
-import vn.hoidanit.jobhunter.DTO.GenerateContentResponse;
+import vn.hoidanit.jobhunter.DTO.request.GenerateContentRequest;
+import vn.hoidanit.jobhunter.DTO.response.GenerateContentResponse;
 import vn.hoidanit.jobhunter.Entity.Conversation;
 import vn.hoidanit.jobhunter.repository.ConversationRepository;
 

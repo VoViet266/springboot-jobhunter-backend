@@ -1,8 +1,8 @@
-package vn.hoidanit.jobhunter.DTO;
+package vn.hoidanit.jobhunter.DTO.response;
 
 import java.util.List;
 
-import vn.hoidanit.jobhunter.DTO.GenerateContentRequest.Content;
+import vn.hoidanit.jobhunter.DTO.request.GenerateContentRequest.Content;
 
 public class GenerateContentResponse {
     private List<Candidate> candidates;

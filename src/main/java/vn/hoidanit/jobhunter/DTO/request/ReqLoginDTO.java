@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.DTO;
+package vn.hoidanit.jobhunter.DTO.request;
 
 public class ReqLoginDTO {
     private String username;
