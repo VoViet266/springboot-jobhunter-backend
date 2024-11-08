@@ -58,6 +58,10 @@ public class companyService {
         }
     }
 
+    public Optional<Company> findById(Long id) {
+       return this.companyRepository.findById(id);
+    }
+
     public void handleDeleteCompany(Long id) {
         companyRepository.deleteById(id); // Xóa người dùng
     }

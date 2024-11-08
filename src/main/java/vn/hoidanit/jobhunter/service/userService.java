@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 package vn.hoidanit.jobhunter.service;
 
@@ -93,16 +89,28 @@ public class userService {
 
     public ResCreateUserDTO convertToResCreateUserDTO(User user) {
         ResCreateUserDTO resCreateUserDTO = new ResCreateUserDTO();
+        ResCreateUserDTO.CompanyUser companyUser = new ResCreateUserDTO.CompanyUser();
+
+
         resCreateUserDTO.setId(user.getId());
         resCreateUserDTO.setEmail(user.getEmail());
         resCreateUserDTO.setName(user.getUsername());
         resCreateUserDTO.setAge(user.getAge());
         resCreateUserDTO.setGender(user.getGender());
         resCreateUserDTO.setAddress(user.getAddress());
+
+        if(user.getCompany() != null){
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            resCreateUserDTO.setCompany(companyUser);
+        }
         return resCreateUserDTO;
     }
     public ResUpdateUserDTO convertToResUpdateUserDTO(User user) {
         ResUpdateUserDTO resUpdateUserDTO = new ResUpdateUserDTO();
+        ResUserDTO.CompanyUser companyUser = new ResUserDTO.CompanyUser();
+        
+
         resUpdateUserDTO.setId(user.getId());
         resUpdateUserDTO.setName(user.getUsername());
         resUpdateUserDTO.setAddress(user.getAddress());

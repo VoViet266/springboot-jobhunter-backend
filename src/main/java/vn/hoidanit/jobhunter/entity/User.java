@@ -3,6 +3,7 @@ package vn.hoidanit.jobhunter.Entity;
 import java.time.Instant;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +26,7 @@ import vn.hoidanit.jobhunter.util.constant.GenderEnum;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "users")
 public class User {
 
@@ -41,11 +43,6 @@ public class User {
     @NotBlank(message = "Password is required")
     @Column(name = "password", nullable = false)
     private String password;
-
-    // Thiết lập quan hệ Many-to-One với Role
-    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id_role",  nullable = true) // Khóa ngoại tham chiếu đến cột "id" của bảng Role
-    private Role role;
     private int age;
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
@@ -61,18 +58,19 @@ public class User {
     private Company company;
 
     @PrePersist
-    public void handleBeforeCreate(){
-        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() 
-        ? SecurityUtil.getCurrentUserLogin().get() 
-        : "client";
+    public void handleBeforeCreate() {
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "client";
         this.createdAt = Instant.now();
     }
+
     @PreUpdate
-    public void handleBeforeUpdate(){
-        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() 
-        ? SecurityUtil.getCurrentUserLogin().get() 
-        : "";
+    public void handleBeforeUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
         this.updatedAt = Instant.now();
     }
-    
+
 }
