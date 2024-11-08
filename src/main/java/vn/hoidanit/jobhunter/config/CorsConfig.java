@@ -24,7 +24,7 @@ public class CorsConfig  {
             Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         // Các header được cho phép truy cập
         configuration.setAllowedHeaders(
-            Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+            Arrays.asList("Authorization", "Content-Type", "accept", "x-no-retry"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
