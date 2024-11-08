@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.DTO.RestLoginDTO;
+import vn.hoidanit.jobhunter.DTO.ResLoginDTO;
 
 // import vn.hoidanit.jobhunter.util.SecretKeyGenerator;
 
@@ -37,7 +37,7 @@ public class SecurityUtil {
     @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
-    public String createAccessToken(Authentication authentication, RestLoginDTO.UserLogin restLoginDTO) {
+    public String createAccessToken(Authentication authentication, ResLoginDTO.UserLogin restLoginDTO) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
@@ -52,7 +52,7 @@ public class SecurityUtil {
                 JwtEncoderParameters.from(jwsHeader, claims))
                 .getTokenValue();
     }
-    public String createRefeshToken(String email, RestLoginDTO restLoginDTO) {
+    public String createRefeshToken(String email, ResLoginDTO restLoginDTO) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
 

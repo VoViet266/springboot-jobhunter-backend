@@ -1,11 +1,8 @@
 package vn.hoidanit.jobhunter.DTO;
 
-public class loginDTO {
+public class ReqLoginDTO {
     private String username;
     private String password;
-
- 
-
     // Getters và setters
     public String getUsername() {
         return username;

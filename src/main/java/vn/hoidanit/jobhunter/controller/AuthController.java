@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.hoidanit.jobhunter.DTO.RegisterReponseDTO;
 import vn.hoidanit.jobhunter.DTO.RegisterRequestDTO;
-import vn.hoidanit.jobhunter.DTO.RestLoginDTO;
-import vn.hoidanit.jobhunter.DTO.loginDTO;
+import vn.hoidanit.jobhunter.DTO.ReqLoginDTO;
+import vn.hoidanit.jobhunter.DTO.ResLoginDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.authService;
 import vn.hoidanit.jobhunter.service.userService;
@@ -48,16 +48,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<RestLoginDTO> login(@RequestBody loginDTO loginDto) {
+    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginDto.getUsername(),
                     loginDto.getPassword());
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            RestLoginDTO restLoginDTO = new RestLoginDTO();
+            ResLoginDTO restLoginDTO = new ResLoginDTO();
             User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
             if (currentUser != null) {
-                RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(
+                ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                         currentUser.getId(),
                         currentUser.getUsername(),
                         currentUser.getEmail());
@@ -126,11 +126,11 @@ public class AuthController {
     }
     
     @GetMapping("/account")
-    public ResponseEntity<RestLoginDTO.UserGetAccount> getAccount(){
+    public ResponseEntity<ResLoginDTO.UserGetAccount> getAccount(){
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User userCurent = this.userService.handleGetUserByEmail(email);
-        RestLoginDTO.UserGetAccount userGetAccount = new RestLoginDTO.UserGetAccount();
-        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin();
+        ResLoginDTO.UserGetAccount userGetAccount = new ResLoginDTO.UserGetAccount();
+        ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin();
         if(userCurent != null){
             userLogin.setId(userCurent.getId());
             userLogin.setEmail(userCurent.getEmail());

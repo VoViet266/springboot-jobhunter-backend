@@ -2,19 +2,19 @@ package vn.hoidanit.jobhunter.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RestLoginDTO {
+public class ResLoginDTO {
     @JsonProperty("access_token")
     private String accessToken;
     private UserLogin user;
     private UserGetAccount userGetAccount;
 
-    public RestLoginDTO(String accessToken, UserLogin user, UserGetAccount userGetAccount) {
+    public ResLoginDTO(String accessToken, UserLogin user, UserGetAccount userGetAccount) {
         this.accessToken = accessToken;
         this.user = user;
         this.userGetAccount = userGetAccount;
     }
 
-    public RestLoginDTO() {
+    public ResLoginDTO() {
     }
     
     public String getAccessToken() {
