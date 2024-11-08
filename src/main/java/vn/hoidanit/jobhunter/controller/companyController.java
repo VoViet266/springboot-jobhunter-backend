@@ -28,8 +28,7 @@ public class companyController {
     public companyController(companyService companyService) {
         this.companyService = companyService;
     }
-
-    @GetMapping("/id/{id}")
+    @GetMapping("/companies/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable("id") Long id) {
         try {
             Optional<Company> company = companyService.handleGetCompanyById(id);
@@ -89,7 +88,7 @@ public class companyController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/companies/{id}")
     public ResponseEntity<Company> deleteCompany(@PathVariable("id") Long id) {
         try {
             this.companyService.handleDeleteCompany(id);
