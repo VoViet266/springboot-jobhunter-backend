@@ -21,7 +21,7 @@ import vn.hoidanit.jobhunter.entity.Company;
 import vn.hoidanit.jobhunter.service.companyService;
 
 @RestController
-@RequestMapping("/api/v1/company")
+@RequestMapping("/api/v1/")
 public class companyController {
     private final companyService companyService;
 

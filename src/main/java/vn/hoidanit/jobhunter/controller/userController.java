@@ -22,7 +22,7 @@ import vn.hoidanit.jobhunter.entity.User;
 import vn.hoidanit.jobhunter.service.userService;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 public class userController {
     private final userService userService;
 
@@ -47,16 +47,13 @@ public class userController {
         }
     }
 
-    @GetMapping("/getusers")
+    @GetMapping("/users")
     public ResponseEntity<resultPaginationDTO> getUser(
         @Filter Specification<User> spec,
         Pageable pageable) {
-            try {
                 resultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
                 return ResponseEntity.ok(resultPaginationDTO);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
+           
     }
 
     @DeleteMapping("/user/delete/{id}")
@@ -69,7 +66,7 @@ public class userController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/updateuser/{id}")
     public ResponseEntity<ResUpdateUserDTO> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
             Optional<User> existingUserOpt = this.userService.handleGetUserByID(id);
             if (!existingUserOpt.isPresent()) {

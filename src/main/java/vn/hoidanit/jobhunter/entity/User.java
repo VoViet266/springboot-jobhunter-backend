@@ -52,12 +52,17 @@ public class User {
     private String createdBy;
     private String updatedBy;
 
-    public User(Long id, String username, String email, String password, Role role) {
+    public User(Long id, String username, String email, String password, Role role, String refreshToken, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.refreshToken = refreshToken;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
     }
     public User() {
     }
