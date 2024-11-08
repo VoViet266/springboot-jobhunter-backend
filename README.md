@@ -78,26 +78,6 @@ backend-project/
 ```
 
 ## Các lệnh Gradle phổ biến
-## Cấu trúc dự án React Vite Gemini
-- `public/`: Chứa các tài nguyên tĩnh.
-- `src/`: Chứa các file nguồn.
-    - `assets/`: Chứa hình ảnh, phông chữ, v.v.
-    - `components/`: Chứa các thành phần React.
-    - `constants/`: Chứa các hằng số dùng trong toàn ứng dụng.
-    - `layouts/`: Chứa các thành phần bố cục.
-    - `pages/`: Chứa các thành phần trang.
-    - `redux/`: Quản lý trạng thái với Redux.
-    - `services/`: Chứa các hàm dịch vụ API.
-    - `utils/`: Chứa các hàm tiện ích.
-    - `App.jsx`: Thành phần chính của ứng dụng.
-    - `main.jsx`: Điểm vào của ứng dụng.
-    - `AppRouter.jsx`: Cấu hình định tuyến tập trung.
-    - `styles/`: Chứa các file CSS và kiểu dáng.
-- `.gitignore`: File cấu hình Git ignore.
-- `index.html`: Mẫu HTML.
-- `package.json`: Metadata và các phụ thuộc của dự án.
-- `README.md`: Tài liệu dự án.
-- `vite.config.js`: Cấu hình Vite.
 - **Chạy ứng dụng:** `gradle bootRun`
 - **Build dự án:** `gradle clean build`
 - **Kiểm tra lỗi code (Linter):** `gradle check`
