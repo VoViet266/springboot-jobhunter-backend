@@ -23,7 +23,6 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 
 import vn.hoidanit.jobhunter.util.SecurityUtil;
-;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
