@@ -5,20 +5,20 @@
 - **Email:** voviet266@gmail.com
 
 ## Yêu cầu hệ thống
-- **JDK:** 11 hoặc cao hơn
-- **Maven:** 3.6.3 hoặc cao hơn
+- **JDK:** 17 hoặc cao hơn
+- **Gradle:** 6.8 hoặc cao hơn
 
 ## Cấu trúc dự án
 - `src/main/kotlin`: Chứa mã nguồn chính của ứng dụng.
 - `src/main/resources`: Chứa các file cấu hình, chẳng hạn như `application.properties`.
-- `pom.xml`: File cấu hình Maven cho dự án.
+- `build.gradle`: File cấu hình Gradle cho dự án.
 
 ## Thiết lập môi trường
 1. **Cài đặt JDK:** Tải JDK từ Oracle hoặc sử dụng OpenJDK. Đảm bảo rằng biến môi trường `JAVA_HOME` đã được thiết lập đúng.
-2. **Cài đặt Maven:** Tải và cài đặt Maven từ trang chủ Maven. Đảm bảo rằng biến môi trường `MAVEN_HOME` đã được thiết lập đúng.
-3. **Kiểm tra cài đặt:** Mở terminal và chạy lệnh sau để đảm bảo Maven và JDK đã được cài đặt thành công:
+2. **Cài đặt Gradle:** Tải và cài đặt Gradle từ trang chủ Gradle. Đảm bảo rằng biến môi trường `GRADLE_HOME` đã được thiết lập đúng.
+3. **Kiểm tra cài đặt:** Mở terminal và chạy lệnh sau để đảm bảo Gradle và JDK đã được cài đặt thành công:
     ```bash
-    mvn -v
+    gradle -v
     java -version
     ```
 
@@ -31,32 +31,38 @@
 2. **Cấu hình file `application.properties`:** Điều chỉnh các thông tin cấu hình phù hợp trong `src/main/resources/application.properties`, bao gồm kết nối cơ sở dữ liệu, cổng và các tham số khác.
 3. **Cài đặt các phụ thuộc:** Chạy lệnh sau để cài đặt các phụ thuộc cần thiết:
     ```bash
-    mvn install
+    gradle build
     ```
-4. **Chạy ứng dụng:** Sử dụng Maven để khởi chạy ứng dụng Spring Boot bằng lệnh sau:
+4. **Chạy ứng dụng:** Sử dụng Gradle để khởi chạy ứng dụng Spring Boot bằng lệnh sau:
     ```bash
-    mvn spring-boot:run
+    gradle bootRun
     ```
     Hoặc có thể build thành file `.jar` trước rồi chạy:
     ```bash
-    mvn clean install
-    java -jar target/<project-name>-0.0.1-SNAPSHOT.jar
+    gradle clean build
+    java -jar build/libs/<project-name>-0.0.1-SNAPSHOT.jar
     ```
 5. **Truy cập ứng dụng:** Ứng dụng sẽ chạy mặc định trên cổng 8080. Bạn có thể truy cập tại:
     ```arduino
     http://localhost:8080
     ```
 
-## Các lệnh Maven phổ biến
-- **Chạy ứng dụng:** `mvn spring-boot:run`
-- **Build dự án:** `mvn clean install`
-- **Kiểm tra lỗi code (Linter):** `mvn checkstyle:check`
-- **Kiểm tra và chạy các bài kiểm thử:** `mvn test`
-- **Cập nhật các phụ thuộc:** `mvn versions:display-dependency-updates`
+## Các lệnh Gradle phổ biến
+- **Chạy ứng dụng:** `gradle bootRun`
+- **Build dự án:** `gradle clean build`
+- **Kiểm tra lỗi code (Linter):** `gradle check`
+- **Kiểm tra và chạy các bài kiểm thử:** `gradle test`
+- **Cập nhật các phụ thuộc:** `gradle dependencyUpdates`
 
 ## Các tài liệu tham khảo
+- [Spring Framework Documentation](https://spring.io/projects/spring-framework)
+- [Spring Data JPA Documentation](https://spring.io/projects/spring-data-jpa)
+- [Spring Security Documentation](https://spring.io/projects/spring-security)
+- [Spring Web Documentation](https://spring.io/guides/gs/serving-web-content/)
+- [Maven Repository](https://mvnrepository.com/)
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [Kotlin Documentation](https://kotlinlang.org/docs/reference/)
-- [Maven Documentation](https://maven.apache.org/guides/index.html)
-- [Spring Boot Maven Plugin Documentation](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/html/)
-- [Checkstyle Maven Plugin Documentation](https://maven.apache.org/plugins/maven-checkstyle-plugin/)
+- [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html)
+- [Spring Boot Gradle Plugin Documentation](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/)
+- [Checkstyle Gradle Plugin Documentation](https://docs.gradle.org/current/userguide/checkstyle_plugin.html)
+
