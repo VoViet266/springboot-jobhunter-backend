@@ -46,8 +46,58 @@
     ```arduino
     http://localhost:8080
     ```
+6. **Các chức năng của dự án**
+- **Quản lý người dùng:** Cho phép tạo, cập nhật, xóa và xem thông tin người dùng.
+- **Xác thực và phân quyền:** Sử dụng Spring Security để xác thực và phân quyền người dùng.
+- **Quản lý công việc:** Cho phép tạo, cập nhật, xóa và xem thông tin công việc.
+- **Tìm kiếm công việc:** Cung cấp chức năng tìm kiếm công việc theo nhiều tiêu chí khác nhau.
+- **Quản lý ứng tuyển:** Cho phép người dùng ứng tuyển vào các công việc và quản lý trạng thái ứng tuyển.
+7. **Cấu trúc dự án Spring Boot**
+```
+backend-project/
+├── src/
+│   ├── main/
+│   │   ├── kotlin/
+│   │   │   └── com/example/project/
+│   │   │       ├── config/            # Cấu hình ứng dụng
+│   │   │       ├── controller/        # Các controller xử lý yêu cầu HTTP
+│   │   │       ├── service/           # Các service chứa logic nghiệp vụ
+│   │   │       ├── dto/               # Các đối tượng truyền dữ liệu giữa các lớp 
+│   │   │       ├── entity/            # Các entity đại diện cho bảng trong cơ sở dữ liệu
+│   │   │       ├── repository/        # Các repository làm việc với cơ sở dữ liệu
+│   │   │       │── model/             # Các model đại diện cho dữ liệu
+│   │   │       └── Application.java   # Lớp chứa hàm main của ứng dụng            
+│   │   └── resources/
+│   │       ├── application.properties # File cấu hình chính của ứng dụng
+│   │       └── static/                # Tài nguyên tĩnh (nếu có)
+│   └── test/
+│       └── kotlin/                    # Các lớp kiểm thử cho ứng dụng
+├── build.gradle                       # File cấu hình Gradle cho dự án
+├── .gitignore                         # Git ignore file
+└── README.md                          # Tài liệu dự án
+```
 
 ## Các lệnh Gradle phổ biến
+## Cấu trúc dự án React Vite Gemini
+- `public/`: Chứa các tài nguyên tĩnh.
+- `src/`: Chứa các file nguồn.
+    - `assets/`: Chứa hình ảnh, phông chữ, v.v.
+    - `components/`: Chứa các thành phần React.
+    - `constants/`: Chứa các hằng số dùng trong toàn ứng dụng.
+    - `layouts/`: Chứa các thành phần bố cục.
+    - `pages/`: Chứa các thành phần trang.
+    - `redux/`: Quản lý trạng thái với Redux.
+    - `services/`: Chứa các hàm dịch vụ API.
+    - `utils/`: Chứa các hàm tiện ích.
+    - `App.jsx`: Thành phần chính của ứng dụng.
+    - `main.jsx`: Điểm vào của ứng dụng.
+    - `AppRouter.jsx`: Cấu hình định tuyến tập trung.
+    - `styles/`: Chứa các file CSS và kiểu dáng.
+- `.gitignore`: File cấu hình Git ignore.
+- `index.html`: Mẫu HTML.
+- `package.json`: Metadata và các phụ thuộc của dự án.
+- `README.md`: Tài liệu dự án.
+- `vite.config.js`: Cấu hình Vite.
 - **Chạy ứng dụng:** `gradle bootRun`
 - **Build dự án:** `gradle clean build`
 - **Kiểm tra lỗi code (Linter):** `gradle check`
