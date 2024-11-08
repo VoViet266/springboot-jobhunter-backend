@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.dto.resultPaginationDTO;
-import vn.hoidanit.jobhunter.entity.Company;
+import vn.hoidanit.jobhunter.DTO.resultPaginationDTO;
+import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.repository.companyRepository;
 
 @Service

@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.hoidanit.jobhunter.dto.UserDTO;
-import vn.hoidanit.jobhunter.entity.Course;
-import vn.hoidanit.jobhunter.entity.User;
+import vn.hoidanit.jobhunter.DTO.UserDTO;
+import vn.hoidanit.jobhunter.Entity.Course;
+import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.courseService;
 
 @RestController

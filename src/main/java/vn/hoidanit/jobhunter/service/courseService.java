@@ -2,7 +2,7 @@ package vn.hoidanit.jobhunter.service;
 
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.entity.Course;
+import vn.hoidanit.jobhunter.Entity.Course;
 import vn.hoidanit.jobhunter.repository.courseRepository;
 
 @Service

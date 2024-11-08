@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.entity;
+package vn.hoidanit.jobhunter.Entity;
 
 import java.time.Instant;
 

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.entity.Role;
+import vn.hoidanit.jobhunter.Entity.Role;
 import vn.hoidanit.jobhunter.repository.roleRepository;
 @Service
 public class roleService {

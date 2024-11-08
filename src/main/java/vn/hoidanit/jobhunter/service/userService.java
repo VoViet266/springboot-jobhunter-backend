@@ -14,11 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.dto.ResCreateUserDTO;
-import vn.hoidanit.jobhunter.dto.ResUpdateUserDTO;
-import vn.hoidanit.jobhunter.dto.ResUserDTO;
-import vn.hoidanit.jobhunter.dto.resultPaginationDTO;
-import vn.hoidanit.jobhunter.entity.User;
+import vn.hoidanit.jobhunter.DTO.ResCreateUserDTO;
+import vn.hoidanit.jobhunter.DTO.ResUpdateUserDTO;
+import vn.hoidanit.jobhunter.DTO.ResUserDTO;
+import vn.hoidanit.jobhunter.DTO.resultPaginationDTO;
+import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.repository.userRepository;
 
 @Service
