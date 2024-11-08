@@ -1,6 +1,7 @@
 package vn.hoidanit.jobhunter.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.hoidanit.jobhunter.DTO.request.RegisterRequestDTO;
 import vn.hoidanit.jobhunter.DTO.request.ReqLoginDTO;
 import vn.hoidanit.jobhunter.DTO.response.RegisterReponseDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResLoginDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.authService;
@@ -81,32 +83,24 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterReponseDTO> register(@RequestBody RegisterRequestDTO registerDTO) {
+    public ResponseEntity<ResCreateUserDTO> register(@RequestBody User user) {
    
             // Kiểm tra xem email đã tồn tại
-            User existingUserOpt = this.userService.handleGetUserByEmail(registerDTO.getEmail());
-            if (existingUserOpt != null) {
-                User user = new User();
-                user.setEmail(registerDTO.getEmail());
-                user.setUsername(registerDTO.getUsername());
-                user.setAddress(registerDTO.getAddress());
-                user.setAge(registerDTO.getAge());
-                user.setGender(registerDTO.getGender());
-                user.setPassword(this.passwordEncoder.encode(registerDTO.getPassword())); // Mã hóa mật khẩu trước khi  Lưu user
-                this.authService.handleCreateUser(user);
-                // Tạo DTO phản hồi
-                RegisterReponseDTO responseDTO = new RegisterReponseDTO(
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getAddress(),
-                        user.getAge(),
-                        user.getGender(),
-                        user.getCreatedAt()
-                );
-                return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+            User existingUserOpt = this.userService.handleGetUserByEmail(user.getEmail());
+            if (existingUserOpt == null) {
+                User User = new User();
+                User.setEmail(user.getEmail());
+                User.setUsername(user.getUsername());
+                User.setAddress(user.getAddress());
+                User.setAge(user.getAge());
+                User.setGender(user.getGender());
+                User.setPassword(this.passwordEncoder.encode(user.getPassword()));
+                User.setCompany(user.getCompany()); // Mã hóa mật khẩu trước khi  Lưu user
+                this.authService.handleCreateUser(User);
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToResCreateUserDTO(User));
             }
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new RegisterReponseDTO());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 
     }
     @PostMapping("/logout")

@@ -56,10 +56,12 @@ public class userService {
                         action.getAge(),
                         action.getCreatedAt(),
                         action.getUpdatedAt(),
-                        new ResUserDTO.CompanyUser(
-                            action.getCompany() != null ? action.getCompany().getId() : null,
-                            action.getCompany() != null ? action.getCompany().getName() : null
-                        )
+                        action.getCompany() != null
+                        ? new ResUserDTO.CompanyUser(
+                              action.getCompany().getId() != null ? action.getCompany().getId() : 0,
+                              action.getCompany().getName() != null ? action.getCompany().getName() : null
+                          )
+                        : null
                 ))
                 .collect(Collectors.toList());
                 resultPaginationDTO.setResult(listUser);
@@ -81,23 +83,20 @@ public class userService {
     }
 
 
-    public User handleUpdateUser(Long id, User updatedUser) {
-        User user = this.userRepository.findById(id).get();
-        if (user != null) {
-            user.setUsername(updatedUser.getUsername());
-            user.setGender(updatedUser.getGender());
-            user.setAge(updatedUser.getAge());
-            user.setAddress(updatedUser.getAddress());
+    public User handleUpdateUser(User updatedUser) {
+        User currentUser = this.handleGetUserByID(updatedUser.getId()).get();
+        if (currentUser != null) {
+            currentUser.setUsername(updatedUser.getUsername());
+            currentUser.setGender(updatedUser.getGender());
+            currentUser.setAge(updatedUser.getAge());
+            currentUser.setAddress(updatedUser.getAddress());
             if(updatedUser.getCompany() != null){
-                Optional<Company> company = this.companyService.findById(updatedUser.getId());
-                if(company.isPresent()){
-                    user.setCompany(company.get());
-                }
-                user.setCompany(null);
+                Optional<Company> companyOptional = this.companyService.findById(updatedUser.getCompany().getId());
+                currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
             }
-            return this.userRepository.save(user);
         }
-        return user;
+        currentUser = this.userRepository.save(currentUser);
+        return currentUser;
     }
     public ResCreateUserDTO convertToResCreateUserDTO(User user) {
         ResCreateUserDTO resCreateUserDTO = new ResCreateUserDTO();

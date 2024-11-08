@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.config;
+package vn.hoidanit.jobhunter.configuration;
 
 import java.util.Collections;
 

@@ -56,20 +56,20 @@ public class userController {
             this.userService.handleDeleteUser(id);
             return ResponseEntity.ok().body(user);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(null);
         }
     }
 
-    @PutMapping("/users/update/{id}")
-    public ResponseEntity<ResUpdateUserDTO> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-            Optional<User> existingUserOpt = this.userService.handleGetUserByID(id);
-            if (!existingUserOpt.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-             User User = this.userService.handleUpdateUser(id, user);
-            return ResponseEntity
-            .ok()
-            .body(this.userService.convertToResUpdateUserDTO(User));
-     
+    @PutMapping("/users/update")
+    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed) {
+       Optional<User> userExist = this.userService.handleGetUserByID(userRed.getId());
+        if (userExist.isPresent()) {
+
+            return ResponseEntity.ok().body(this.userService.convertToResUpdateUserDTO(this.userService.handleUpdateUser(userRed)));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

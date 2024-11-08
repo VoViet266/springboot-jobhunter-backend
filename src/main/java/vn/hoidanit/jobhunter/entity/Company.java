@@ -3,6 +3,8 @@ package vn.hoidanit.jobhunter.Entity;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,7 +42,8 @@ public class Company {
     private String createBy;
     private String updateBy;
     @OneToMany(mappedBy = "company", fetch=FetchType.LAZY)
-    private List<User> users;
+    @JsonIgnore
+    List<User> users;
 
     @PrePersist
     public void handleBeforeCreate() {

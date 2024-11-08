@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.config;
+package vn.hoidanit.jobhunter.configuration;
 
 
 import java.util.Arrays;
@@ -22,7 +22,6 @@ public class CorsConfig  {
             Arrays.asList("http://localhost:3000", "http://localhost:4173", "http://localhost:5137")); 
         configuration.setAllowedMethods(
             Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        // Các header được cho phép truy cập
         configuration.setAllowedHeaders(
             Arrays.asList("Authorization", "Content-Type", "accept", "x-no-retry"));
         configuration.setAllowCredentials(true);

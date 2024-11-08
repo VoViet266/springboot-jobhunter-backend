@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.config;
+package vn.hoidanit.jobhunter.configuration;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(
                         authz -> authz
                                 // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
-                                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/")
+                                .requestMatchers("/api/v1/auth/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
