@@ -40,6 +40,14 @@ public class jobService {
         return this.jobRepository.findAll();
     }
 
+
+    // Hàm xử lý lấy tất cả công việc
+    // Hàm này sẽ trả về một đối tượng ResultPaginationDTO
+    // ResultPaginationDTO chứa thông tin về trang hiện tại, số trang, tổng số phần tử và dữ liệu
+    //@Filter là một annotation của thư viện spring-filter giúp xử lý các tham số filter truyền vào từ client   
+    // Pageable là một interface của Spring Data giúp xử lý phân trang
+    // Pageable sẽ chứa thông tin về trang hiện tại, số phần tử trên mỗi trang, sắp xếp dữ liệu
+    // Pageable sẽ được truyền vào hàm findAll của jobRepository để lấy dữ liệu
     public ResultPaginationDTO handleGetAllJob(Specification<Job> specification, Pageable pageable) {
         Page<Job> jobPage = this.jobRepository.findAll(specification, pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
@@ -71,7 +79,8 @@ public class jobService {
             job.setSkills(skillList);
         }
         Job curentJob = jobRepository.save(job);
-
+        // Khơi tạo ResCreateJobDTO để trả về dữ liệu cho client từ dữ liệu đã lưu
+        //Tuy chỉnh lại dữ liệu trả về cho client
         ResCreateJobDTO resCreateJobDTO = new ResCreateJobDTO(
                 curentJob.getId(),
                 curentJob.getName(),
