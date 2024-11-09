@@ -94,7 +94,7 @@ public class AuthController {
         User.setAge(user.getAge());
         User.setGender(user.getGender());
         User.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        User.setCompany(user.getCompany()); // Mã hóa mật khẩu trước khi Lưu user
+        User.setCompany(user.getCompany()); 
         this.authService.handleCreateUser(User);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToResCreateUserDTO(User));
 

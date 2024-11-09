@@ -51,7 +51,7 @@ public class Job {
     private String updatedBy;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", referencedColumnName = "id") 
     private Company company;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -62,6 +62,7 @@ public class Job {
     inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     private List<Skill> skills;
+
 
     @PrePersist
     public void handleBeforeCreate() {

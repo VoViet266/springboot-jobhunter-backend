@@ -15,6 +15,7 @@ import vn.hoidanit.jobhunter.DTO.response.ResUpdateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Job;
 import vn.hoidanit.jobhunter.Entity.Skill;
+import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.repository.jobRepository;
 import vn.hoidanit.jobhunter.repository.skillRepository;
 
@@ -23,12 +24,13 @@ public class jobService {
 
     private final jobRepository jobRepository;
     private final skillRepository skillRepository;
+    private final companyService companyService;
 
-    public jobService(jobRepository jobRepository, skillRepository skillRepository) {
+    public jobService(jobRepository jobRepository, skillRepository skillRepository, companyService companyService) {
         this.skillRepository = skillRepository;
         this.jobRepository = jobRepository;
+        this.companyService = companyService;
     }
-
 
     public Optional<Job> handleGetJobByID(Long id) {
         return this.jobRepository.findById(id);
@@ -56,6 +58,10 @@ public class jobService {
     }
 
     public ResCreateJobDTO handleCreateJob(Job job) {
+        Company company = this.companyService.findById(job.getCompany().getId()).get();
+        if (company != null) {
+            job.setCompany(company);
+        }
         if (job.getSkills() != null) {
             List<Long> skills = job.getSkills()
                     .stream()
@@ -65,28 +71,7 @@ public class jobService {
             job.setSkills(skillList);
         }
         Job curentJob = jobRepository.save(job);
-        // ResCreateJobDTO resCreateJobDTO = new ResCreateJobDTO();
-        // resCreateJobDTO.setId(curentJob.getId());
-        // resCreateJobDTO.setName(curentJob.getName());
-        // resCreateJobDTO.setLocation(curentJob.getLocation());
-        // resCreateJobDTO.setSalary(curentJob.getSalary());
-        // resCreateJobDTO.setQuantity(curentJob.getQuantity());
-        // resCreateJobDTO.setLever(curentJob.getLever());
-        // resCreateJobDTO.setStartDate(curentJob.getStartDate());
-        // resCreateJobDTO.setEndDate(curentJob.getEndDate());
-        // resCreateJobDTO.setActived(curentJob.isActived());
-        // resCreateJobDTO.setCreatedAt(curentJob.getCreatedAt());
-        // resCreateJobDTO.setUpdatedAt(curentJob.getUpdatedAt());
-        // resCreateJobDTO.setCreatedBy(curentJob.getCreatedBy());
-        // resCreateJobDTO.setUpdatedBy(curentJob.getUpdatedBy());
 
-        // if(curentJob.getSkills() != null){
-        // List<String> skills = curentJob.getSkills()
-        // .stream()
-        // .map(action -> action.getName())
-        // .collect(Collectors.toList());
-        // resCreateJobDTO.setSkills(skills);
-        // }
         ResCreateJobDTO resCreateJobDTO = new ResCreateJobDTO(
                 curentJob.getId(),
                 curentJob.getName(),
@@ -101,10 +86,16 @@ public class jobService {
                 curentJob.getUpdatedAt(),
                 curentJob.getCreatedBy(),
                 curentJob.getUpdatedBy(),
+                curentJob.getCompany() != null
+                        ? new ResCreateJobDTO.CompanyJob(curentJob.getCompany()
+                                .getId(),
+                                curentJob.getCompany()
+                                        .getName())
+                        : null,
                 curentJob.getSkills() != null
                         ? curentJob.getSkills()
                                 .stream()
-                                .map(action -> action.getName())
+                                .map(Skill::getName)
                                 .collect(Collectors.toList())
                         : Collections.emptyList());
 
@@ -123,29 +114,8 @@ public class jobService {
                 job.setSkills(skillList);
 
             }
-            Job curentJob = jobRepository.save(job);
-            // ResUpdateJobDTO resUpdateJobDTO = new ResUpdateJobDTO();
-            // resUpdateJobDTO.setId(curentJob.getId());
-            // resUpdateJobDTO.setName(curentJob.getName());
-            // resUpdateJobDTO.setLocation(curentJob.getLocation());
-            // resUpdateJobDTO.setSalary(curentJob.getSalary());
-            // resUpdateJobDTO.setQuantity(curentJob.getQuantity());
-            // resUpdateJobDTO.setLever(curentJob.getLever());
-            // resUpdateJobDTO.setStartDate(curentJob.getStartDate());
-            // resUpdateJobDTO.setEndDate(curentJob.getEndDate());
-            // resUpdateJobDTO.setActived(curentJob.isActived());
-            // resUpdateJobDTO.setCreatedAt(curentJob.getCreatedAt());
-            // resUpdateJobDTO.setUpdatedAt(curentJob.getUpdatedAt());
-            // resUpdateJobDTO.setCreatedBy(curentJob.getCreatedBy());
-            // resUpdateJobDTO.setUpdatedBy(curentJob.getUpdatedBy());
-            // if (curentJob.getSkills() != null) {
-            // List<String> skills = curentJob.getSkills()
-            // .stream()
-            // .map(action -> action.getName())
-            // .collect(Collectors.toList());
-            // resUpdateJobDTO.setSkills(skills);
-            // }
 
+            Job curentJob = jobRepository.save(job);
             ResUpdateJobDTO resUpdateJobDTO = new ResUpdateJobDTO(
                     curentJob.getId(),
                     curentJob.getName(),
@@ -160,6 +130,12 @@ public class jobService {
                     curentJob.getUpdatedAt(),
                     curentJob.getCreatedBy(),
                     curentJob.getUpdatedBy(),
+                    curentJob.getCompany() != null
+                            ? new ResUpdateJobDTO.CompanyJob(curentJob.getCompany()
+                                    .getId(),
+                                    curentJob.getCompany()
+                                            .getName())
+                            : null,
                     curentJob.getSkills() != null
                             ? curentJob.getSkills()
                                     .stream()
@@ -174,6 +150,4 @@ public class jobService {
     public void handleDeleteJob(Long id) {
         this.jobRepository.deleteById(id);
     }
-
-
 }

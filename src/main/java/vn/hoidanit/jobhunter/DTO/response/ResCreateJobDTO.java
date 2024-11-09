@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.util.constant.LevelEnum;
 
 @Setter
@@ -27,6 +28,26 @@ public class ResCreateJobDTO {
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
+    
+    private CompanyJob company;
 
     private List<String> skills;
+
+
+
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CompanyJob {
+        private Long id;
+        private String name;
+    }
+
+    @Setter
+    @Getter
+    public static class SkillJob {
+        private Long id;
+        private String name;
+    }
 }

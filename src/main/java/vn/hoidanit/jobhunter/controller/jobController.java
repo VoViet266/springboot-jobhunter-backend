@@ -57,12 +57,10 @@ public class jobController {
 
     @PostMapping("/jobs/create")
     public ResponseEntity<ResCreateJobDTO> createJoḅ̣̣(@RequestBody Job job) {
-        try {
-            ResCreateJobDTO resCreateJobDTO = jobService.handleCreateJob(job);
-            return ResponseEntity.ok(resCreateJobDTO);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
-        }
+        
+            // this.jobService.handleCreateJob(job);
+            return ResponseEntity.ok(this.jobService.handleCreateJob(job));
+     
     }
 
     @PutMapping("/jobs/update")

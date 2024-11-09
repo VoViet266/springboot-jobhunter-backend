@@ -27,6 +27,23 @@ public class ResUpdateJobDTO {
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
-
+    private CompanyJob company;
     private List<String> skills;
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class CompanyJob {
+        private Long id;
+        private String name;
+    }
+
+   
+    @Setter
+    @Getter
+    public static class SkillJob {
+        private Long id;
+        private String name;
+    }
 }
