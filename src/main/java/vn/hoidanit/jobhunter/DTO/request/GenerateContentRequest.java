@@ -2,6 +2,11 @@ package vn.hoidanit.jobhunter.DTO.request;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 public class GenerateContentRequest {
     private List<Content> contents;
 
@@ -24,32 +29,15 @@ public class GenerateContentRequest {
         this.contents = contents;
     }
 
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Content {
         private String role;
         private List<Part> parts;
 
-        public Content() {
-        }
 
-        public Content(List<Part> parts) {
-            this.parts = parts;
-        }
-
-        public List<Part> getParts() {
-            return parts;
-        }
-
-        public void setParts(List<Part> parts) {
-            this.parts = parts;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public void setRole(String role) {
-            this.role = role;
-        }
         
     public static class Part {
         private String text;

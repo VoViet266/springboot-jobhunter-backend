@@ -18,7 +18,7 @@ import com.turkraft.springfilter.boot.Filter;
 
 import vn.hoidanit.jobhunter.DTO.response.ResUpdateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResUserDTO;
-import vn.hoidanit.jobhunter.DTO.response.resultPaginationDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.userService;
 
@@ -42,10 +42,10 @@ public class userController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<resultPaginationDTO> getUser(
+    public ResponseEntity<ResultPaginationDTO> getUser(
         @Filter Specification<User> spec,
         Pageable pageable) {
-                resultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
+                ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
                 return ResponseEntity.ok(resultPaginationDTO);
            
     }

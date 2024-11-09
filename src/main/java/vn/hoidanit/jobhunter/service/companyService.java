@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.DTO.response.resultPaginationDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.repository.companyRepository;
 
@@ -23,11 +23,11 @@ public class companyService {
         return companyRepository.save(company); // Lưu người dùng vào cơ sở dữ liệu
     }
 
-    public resultPaginationDTO handleGetAllCompany(
+    public ResultPaginationDTO handleGetAllCompany(
         Specification<Company> specification, Pageable pageable) {
         Page<Company> pageCompany = companyRepository.findAll(specification, pageable);// sử dụng Pageable ở đây
-        resultPaginationDTO resultPaginationDTO = new resultPaginationDTO();
-        resultPaginationDTO.Meta meta = new resultPaginationDTO.Meta();
+        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
         // Tạo ra một đối tượng Meta để chứa thông tin phân trang
         // Pageable sẽ trả về một Page, chứa thông tin phân trang và content
         meta.setPage(pageCompany.getNumber() + 1);

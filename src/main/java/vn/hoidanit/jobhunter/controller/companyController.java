@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkraft.springfilter.boot.Filter;
 
-import vn.hoidanit.jobhunter.DTO.response.resultPaginationDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.service.companyService;
 
@@ -43,11 +43,11 @@ public class companyController {
     }
 
     @GetMapping("/companies")
-    public ResponseEntity<resultPaginationDTO> getCompany(
+    public ResponseEntity<ResultPaginationDTO> getCompany(
             @Filter Specification<Company> specification,
             Pageable pageable) {
         try {
-            resultPaginationDTO resultPaginationDTO = companyService.handleGetAllCompany(
+            ResultPaginationDTO resultPaginationDTO = companyService.handleGetAllCompany(
                     specification,
                     pageable);
             return ResponseEntity.ok(resultPaginationDTO);

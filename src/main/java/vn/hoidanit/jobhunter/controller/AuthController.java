@@ -1,7 +1,6 @@
 package vn.hoidanit.jobhunter.controller;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.hoidanit.jobhunter.DTO.request.RegisterRequestDTO;
 import vn.hoidanit.jobhunter.DTO.request.ReqLoginDTO;
-import vn.hoidanit.jobhunter.DTO.response.RegisterReponseDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResLoginDTO;
 import vn.hoidanit.jobhunter.Entity.User;
@@ -99,7 +96,6 @@ public class AuthController {
                 this.authService.handleCreateUser(User);
                 return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToResCreateUserDTO(User));
             }
-
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 
     }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class resultPaginationDTO {
+public class ResultPaginationDTO {
     private Meta meta;
     private Object result;
 
@@ -22,5 +22,9 @@ public class resultPaginationDTO {
         private int page;
         private int pageSize;
         private int pages;
+
+        public void setPage(int i) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 }

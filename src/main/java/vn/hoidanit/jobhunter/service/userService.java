@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import vn.hoidanit.jobhunter.DTO.response.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResUpdateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResUserDTO;
-import vn.hoidanit.jobhunter.DTO.response.resultPaginationDTO;
+import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.repository.userRepository;
@@ -27,16 +27,16 @@ public class userService {
         this.userRepository = userRepository;
         this.companyService = companyService;
 
-
     }
 
     public Optional<User> handleGetUserByID(Long id) {
         return this.userRepository.findById(id);
     }
-    public resultPaginationDTO handleAllGetUser(Specification<User> specification, Pageable pageable) {
+
+    public ResultPaginationDTO handleAllGetUser(Specification<User> specification, Pageable pageable) {
         Page<User> pageUsers = userRepository.findAll(specification, pageable); // sử dụng Pageable ở đây
-        resultPaginationDTO resultPaginationDTO = new resultPaginationDTO();
-        resultPaginationDTO.Meta meta = new resultPaginationDTO.Meta();
+        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 
         meta.setPage(pageUsers.getNumber() + 1);
         meta.setPageSize(pageUsers.getSize());
@@ -44,7 +44,6 @@ public class userService {
         meta.setPages(pageUsers.getTotalPages());
         meta.setTotal(pageUsers.getTotalElements());
         resultPaginationDTO.setMeta(meta);
-        
 
         List<ResUserDTO> listUser = pageUsers.stream()
                 .map(action -> new ResUserDTO(
@@ -57,14 +56,12 @@ public class userService {
                         action.getCreatedAt(),
                         action.getUpdatedAt(),
                         action.getCompany() != null
-                        ? new ResUserDTO.CompanyUser(
-                              action.getCompany().getId() != null ? action.getCompany().getId() : 0,
-                              action.getCompany().getName() != null ? action.getCompany().getName() : null
-                          )
-                        : null
-                ))
+                                ? new ResUserDTO.CompanyUser(
+                                        action.getCompany().getId() != null ? action.getCompany().getId() : null,
+                                        action.getCompany().getName() != null ? action.getCompany().getName() : null)
+                                : null))
                 .collect(Collectors.toList());
-                resultPaginationDTO.setResult(listUser);
+        resultPaginationDTO.setResult(listUser);
 
         return resultPaginationDTO;
     }
@@ -82,22 +79,25 @@ public class userService {
         return this.userRepository.findByEmail(email);
     }
 
-
     public User handleUpdateUser(User updatedUser) {
         User currentUser = this.handleGetUserByID(updatedUser.getId()).get();
+
         if (currentUser != null) {
             currentUser.setUsername(updatedUser.getUsername());
             currentUser.setGender(updatedUser.getGender());
             currentUser.setAge(updatedUser.getAge());
             currentUser.setAddress(updatedUser.getAddress());
-            if(updatedUser.getCompany() != null){
+
+            if (updatedUser.getCompany() != null) {
                 Optional<Company> companyOptional = this.companyService.findById(updatedUser.getCompany().getId());
                 currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
             }
         }
+        
         currentUser = this.userRepository.save(currentUser);
         return currentUser;
     }
+
     public ResCreateUserDTO convertToResCreateUserDTO(User user) {
         ResCreateUserDTO resCreateUserDTO = new ResCreateUserDTO();
         ResCreateUserDTO.CompanyUser companyUser = new ResCreateUserDTO.CompanyUser();
@@ -109,21 +109,24 @@ public class userService {
         resCreateUserDTO.setGender(user.getGender());
         resCreateUserDTO.setAddress(user.getAddress());
 
-        if(user.getCompany() != null){
+        if (user.getCompany() != null) {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             resCreateUserDTO.setCompany(companyUser);
         }
         return resCreateUserDTO;
     }
+
     public ResUpdateUserDTO convertToResUpdateUserDTO(User user) {
         ResUpdateUserDTO resUpdateUserDTO = new ResUpdateUserDTO();
         ResUpdateUserDTO.CompanyUser companyUser = new ResUpdateUserDTO.CompanyUser();
-        if(user.getCompany() != null){
+
+        if (user.getCompany() != null) {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             resUpdateUserDTO.setCompany(companyUser);
         }
+
         resUpdateUserDTO.setId(user.getId());
         resUpdateUserDTO.setName(user.getUsername());
         resUpdateUserDTO.setAddress(user.getAddress());
@@ -133,7 +136,6 @@ public class userService {
         resUpdateUserDTO.setUpdatedBy(user.getUpdatedBy());
         return resUpdateUserDTO;
     }
-
 
     public ResUserDTO convertToResUserDTO(User user) {
         ResUserDTO resUserDTO = new ResUserDTO();
@@ -148,18 +150,19 @@ public class userService {
         resUserDTO.setCreatedAt(user.getCreatedAt());
         resUserDTO.setUpdatedAt(user.getUpdatedAt());
 
-        if(user.getCompany() != null){
+        if (user.getCompany() != null) {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             resUserDTO.setCompany(companyUser);
         }
         return resUserDTO;
     }
-    public void updateUserToken(String token, String email){
+
+    public void updateUserToken(String token, String email) {
         User user = this.userRepository.findByEmail(email);
-       if(user != null){
+        if (user != null) {
             user.setRefreshToken(token);
             this.userRepository.save(user);
-       }
+        }
     }
 }

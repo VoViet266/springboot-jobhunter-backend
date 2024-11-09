@@ -53,8 +53,9 @@ public class User {
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
+
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company;
 
     @PrePersist
