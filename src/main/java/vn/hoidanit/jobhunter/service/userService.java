@@ -92,9 +92,8 @@ public class userService {
                 Optional<Company> companyOptional = this.companyService.findById(updatedUser.getCompany().getId());
                 currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
             }
+            currentUser = this.userRepository.save(currentUser);
         }
-        
-        currentUser = this.userRepository.save(currentUser);
         return currentUser;
     }
 

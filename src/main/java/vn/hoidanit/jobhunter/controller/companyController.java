@@ -21,7 +21,7 @@ import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.service.companyService;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class companyController {
     private final companyService companyService;
 
@@ -58,7 +58,7 @@ public class companyController {
 
     }
 
-    @PostMapping("/create")
+    @PostMapping("/companies/create")
     public ResponseEntity<Company> createCompany(@RequestBody Company company) {
         try {
             Company newCompany = companyService.handleCreateCompany(company);

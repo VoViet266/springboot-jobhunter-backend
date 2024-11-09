@@ -3,6 +3,8 @@ package vn.hoidanit.jobhunter.Entity;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,6 +55,7 @@ public class Job {
     private Company company;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("jobs")
     @JoinTable(
     name = "job_skill",
     joinColumns = @JoinColumn(name = "job_id"),

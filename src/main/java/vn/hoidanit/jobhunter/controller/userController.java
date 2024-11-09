@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.turkraft.springfilter.boot.Filter;
 
@@ -31,45 +32,46 @@ public class userController {
         this.userService = userService;
 
     }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<ResUserDTO> getUserByID(@PathVariable("id") Long id) {
         try {
             User user = this.userService.handleGetUserByID(id).get();
             return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new RuntimeException("User not found");
         }
     }
 
     @GetMapping("/users")
     public ResponseEntity<ResultPaginationDTO> getUser(
-        @Filter Specification<User> spec,
-        Pageable pageable) {
-                ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
-                return ResponseEntity.ok(resultPaginationDTO);
-           
+            @Filter Specification<User> spec,
+            Pageable pageable) {
+        try {
+            ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
+            return ResponseEntity.ok(resultPaginationDTO);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
     }
 
     @DeleteMapping("/users/delete/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") Long id, User user) {
-        try {
-            this.userService.handleDeleteUser(id);
-            return ResponseEntity.ok().body(user);
-        } catch (Exception e) {
-            return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(null);
+        if (!this.userService.handleGetUserByID(id).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id user not found");
         }
+        this.userService.handleDeleteUser(id);
+        return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("/users/update")
     public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed) {
-       Optional<User> userExist = this.userService.handleGetUserByID(userRed.getId());
+        Optional<User> userExist = this.userService.handleGetUserByID(userRed.getId());
         if (userExist.isPresent()) {
-
-            return ResponseEntity.ok().body(this.userService.convertToResUpdateUserDTO(this.userService.handleUpdateUser(userRed)));
+            return ResponseEntity.ok()
+                    .body(this.userService.convertToResUpdateUserDTO(this.userService.handleUpdateUser(userRed)));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not existing");
         }
     }
 }

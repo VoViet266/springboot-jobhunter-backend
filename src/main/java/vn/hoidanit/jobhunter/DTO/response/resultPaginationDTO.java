@@ -22,9 +22,5 @@ public class ResultPaginationDTO {
         private int page;
         private int pageSize;
         private int pages;
-
-        public void setPage(int i) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
     }
 }

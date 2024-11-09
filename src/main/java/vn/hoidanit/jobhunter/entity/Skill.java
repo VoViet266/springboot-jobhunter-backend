@@ -3,6 +3,8 @@ package vn.hoidanit.jobhunter.Entity;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ import lombok.Setter;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
 
 
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -30,14 +33,15 @@ public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String name;
+
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "skills")
+    @JsonIgnore
     private List<Job> jobs;
     
 
