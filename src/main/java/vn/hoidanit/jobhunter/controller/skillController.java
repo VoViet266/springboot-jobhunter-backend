@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.turkraft.springfilter.boot.Filter;
 
-import jakarta.websocket.server.PathParam;
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Skill;
 import vn.hoidanit.jobhunter.service.skillService;
@@ -52,7 +52,7 @@ public class skillController {
 
     @PutMapping("/skills")
     public ResponseEntity<Skill> updateSkill(@RequestBody Skill skill) {
-        Skill currentSkill = this.skillService.handleGetSkillById(skill.getId());
+        Skill currentSkill = this.skillService.handleGetSkillById(skill.getId()).get();
         if (currentSkill == null) {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found");
         }
@@ -60,12 +60,14 @@ public class skillController {
     }
 
     @DeleteMapping("/skills/{id}")
-    public ResponseEntity<String> deleteSkill( @PathParam("id") @RequestBody Long id) {
-        Skill currentSkill = this.skillService.handleGetSkillById(id);
-        if (currentSkill == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found");
+    public ResponseEntity<Skill> deleteSkill(@PathVariable("id") Long id) {
+        Long currentSkill = this.skillService.handleGetSkillById(id).get().getId();
+        if (currentSkill != null) {
+            this.skillService.handleDeleteSkill(currentSkill);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
-        this.skillService.handleDeleteSkill(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Skill deleted successfully!!");
+       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+    
     }
 }

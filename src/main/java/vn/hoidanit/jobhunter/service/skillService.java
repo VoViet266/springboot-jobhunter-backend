@@ -20,7 +20,7 @@ public class skillService {
     }
 
     public Skill handleCreateSkill(Skill skill) {
-        
+
         return this.skillRepository.save(skill);
     }
 
@@ -32,15 +32,16 @@ public class skillService {
         Optional<Skill> skill = this.skillRepository.findById(id);
         Skill currentSkill = skill.get();
         // remove skill from job
-        currentSkill.getJobs().forEach(job -> job.getSkills().remove(currentSkill));
+        currentSkill.getJobs().forEach(job -> job.getSkills()
+                .remove(currentSkill));
         this.skillRepository.deleteById(id);
     }
 
-    public Skill handleGetSkillById(Long id) {
-        return this.skillRepository.findById(id).orElse(null);
+    public Optional<Skill> handleGetSkillById(Long id) {
+        return this.skillRepository.findById(id);
     }
-  
-    public boolean isNameExist (String name) {
+
+    public boolean isNameExist(String name) {
         return this.skillRepository.existsByName(name);
 
     }
@@ -56,7 +57,6 @@ public class skillService {
         meta.setPages(pageSkills.getTotalPages());
         meta.setTotal(pageSkills.getTotalElements());
         resultPaginationDTO.setMeta(meta);
-
         resultPaginationDTO.setResult(pageSkills.getContent());
 
         return resultPaginationDTO;
