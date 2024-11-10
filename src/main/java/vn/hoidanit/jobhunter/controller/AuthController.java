@@ -23,6 +23,7 @@ import vn.hoidanit.jobhunter.DTO.response.ResLoginDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.authService;
 import vn.hoidanit.jobhunter.service.userService;
+import vn.hoidanit.jobhunter.service.error.IdInValidException;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
 
 @RequestMapping("/api/v1/auth")
@@ -80,12 +81,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResCreateUserDTO> register(@RequestBody User user) {
+    public ResponseEntity<ResCreateUserDTO> register(@RequestBody User user)
+            throws IdInValidException {
 
         // Kiểm tra xem email đã tồn tại
         User existingUserOpt = this.userService.handleGetUserByEmail(user.getEmail());
         if (existingUserOpt != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+            throw new IdInValidException("Email already exists");
         }
         User User = new User();
         User.setEmail(user.getEmail());

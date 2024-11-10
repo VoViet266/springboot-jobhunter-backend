@@ -30,7 +30,8 @@ public class userService {
     }
 
     public Optional<User> handleGetUserByID(Long id) {
-        return this.userRepository.findById(id);
+        Optional<User> user = this.userRepository.findById(id);
+        return user.ofNullable(null);
     }
 
     public ResultPaginationDTO handleAllGetUser(Specification<User> specification, Pageable pageable) {

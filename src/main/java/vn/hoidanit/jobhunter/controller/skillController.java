@@ -52,7 +52,7 @@ public class skillController {
 
     @PutMapping("/skills")
     public ResponseEntity<Skill> updateSkill(@RequestBody Skill skill) {
-        Skill currentSkill = this.skillService.handleGetSkillById(skill.getId()).get();
+        Skill currentSkill = this.skillService.handleGetSkillById(skill.getId());
         if (currentSkill == null) {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found");
         }
@@ -60,13 +60,13 @@ public class skillController {
     }
 
     @DeleteMapping("/skills/{id}")
-    public ResponseEntity<Skill> deleteSkill(@PathVariable("id") Long id) {
-        Long currentSkill = this.skillService.handleGetSkillById(id).get().getId();
+    public ResponseEntity<String> deleteSkill(@PathVariable("id") Long id) {
+        Long currentSkill = this.skillService.handleGetSkillById(id).getId();
         if (currentSkill != null) {
             this.skillService.handleDeleteSkill(currentSkill);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body("Skill deleted");
         }
-       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Skill not found");
 
     
     }

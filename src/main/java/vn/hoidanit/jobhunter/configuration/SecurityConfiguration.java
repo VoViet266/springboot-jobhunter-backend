@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(
                         authz -> authz
                                 // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
-                                .requestMatchers("/api/v1/auth/**")
+                                .requestMatchers("/api/v1/auth/**", "/", "storage/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

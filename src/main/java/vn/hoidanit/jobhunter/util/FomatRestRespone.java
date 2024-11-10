@@ -25,50 +25,50 @@ public class FomatRestRespone implements ResponseBodyAdvice<Object> {
     @Override
     @Nullable
     public Object beforeBodyWrite(
-        Object body,
-        MethodParameter returnType,
-        MediaType selectedContentType,
-        Class selectedConverterType,
-        ServerHttpRequest request,
-        ServerHttpResponse response) {
+            Object body,
+            MethodParameter returnType,
+            MediaType selectedContentType,
+            Class selectedConverterType,
+            ServerHttpRequest request,
+            ServerHttpResponse response) {
         HttpServletResponse ServletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = ServletResponse.getStatus();
 
-            
-        RestRespone<Object> res  = new RestRespone<>();
+        RestRespone<Object> res = new RestRespone<>();
         res.setStatuscode(status);
-     
-        switch (status) {
-            case 400 -> {
-                res.setError(body.toString());
-                res.setMessage("Bad Request");
+        if (status > 400) {
+            if (status == 401) {
+                res.setError("Unauthorized");
+                res.setMessage(body.toString());
+            } else if (status == 403) {
+                res.setError("Forbidden");
+                res.setMessage(body.toString());
+            } else if (status == 400) {
+                res.setError("Bad Request");
+                res.setMessage(body.toString());
+            } else if (status == 405) {
+                res.setError("Method Not Allowed");
+                res.setMessage(body.toString());
+            } else if (status == 409) {
+                res.setError("Conflict");
+                res.setMessage("Conflict");
+            } else if (status == 415) {
+                res.setError("Unsupported Media Type");
+                res.setMessage(body.toString());
+            } else if (status == 404) {
+                res.setError("Not Found");
+                res.setMessage(body.toString());
+            } else if (status == 500) {
+                res.setError("Internal Server Error");
+                res.setMessage(body.toString());
             }
-            case 401 -> {
-                res.setError(body.toString());
-                res.setMessage("Unauthorized");
-            }
-            case 403 -> {
-                res.setError(body.toString());
-                res.setMessage("Forbidden");
-            }
-            case 404 -> {
-                res.setError(body.toString());
-                res.setMessage("Not Found");
-            }
-            case 500 -> {
-                res.setError(body.toString());
-                res.setMessage("Internal Server Error");
-            }
-            case 503 -> {
-                res.setError(body.toString());
-                res.setMessage("Service Unavailable");
-            }
-            default -> {
-                res.setData(body);
-                res.setMessage("Success!");
-            }
+        } else {
+            res.setStatuscode(status);
+            res.setMessage("Get API Success");
+            res.setError("Don't have error");
+            res.setData(body);
         }
-        return res; 
+        return res;
     }
 
 }

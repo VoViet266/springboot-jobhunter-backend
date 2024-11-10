@@ -37,8 +37,8 @@ public class skillService {
         this.skillRepository.deleteById(id);
     }
 
-    public Optional<Skill> handleGetSkillById(Long id) {
-        return this.skillRepository.findById(id);
+    public Skill handleGetSkillById(Long id) {
+        return this.skillRepository.findById(id).get();
     }
 
     public boolean isNameExist(String name) {

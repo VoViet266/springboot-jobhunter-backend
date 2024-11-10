@@ -22,6 +22,7 @@ import vn.hoidanit.jobhunter.DTO.response.ResUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.userService;
+import vn.hoidanit.jobhunter.service.error.IdInValidException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -34,25 +35,24 @@ public class userController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<ResUserDTO> getUserByID(@PathVariable("id") Long id) {
-        try {
-            User user = this.userService.handleGetUserByID(id).get();
-            return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user));
-        } catch (Exception e) {
-            throw new RuntimeException("User not found");
-        }
+    public ResponseEntity<ResUserDTO> getUserByID(@PathVariable("id") Long id)
+    throws IdInValidException {
+            Optional<User> user = this.userService.handleGetUserByID(id);
+            if (user.isEmpty()) {
+                throw new IdInValidException("Id not found");
+            }
+            return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user.get()));
+       
     }
 
     @GetMapping("/users")
     public ResponseEntity<ResultPaginationDTO> getUser(
             @Filter Specification<User> spec,
-            Pageable pageable) {
-        try {
+            Pageable pageable) 
+            {
             ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
             return ResponseEntity.ok(resultPaginationDTO);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
-        }
+        
     }
 
     @DeleteMapping("/users/delete/{id}")

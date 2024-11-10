@@ -13,6 +13,6 @@ public class RestRespone<T> {
     private int statuscode;
     private String error;
     private String message;
-    private  T data;
-
+    private T data;
 }
+
