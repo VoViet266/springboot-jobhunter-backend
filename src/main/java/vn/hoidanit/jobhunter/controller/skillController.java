@@ -18,6 +18,7 @@ import com.turkraft.springfilter.boot.Filter;
 
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Skill;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.skillService;
 
 @RestController
@@ -42,9 +43,10 @@ public class skillController {
     }
 
     @PostMapping("/skills/create")
-    public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) {
+    public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) throws IdInvalidException {
         if (skill.getName() != null && this.skillService.isNameExist(skill.getName())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Skill name already exists");
+            throw new IdInvalidException("Skill name already exists");
+            
         }
         return ResponseEntity.ok(this.skillService.handleCreateSkill(skill));
 

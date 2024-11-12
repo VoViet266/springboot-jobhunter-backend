@@ -1,5 +1,6 @@
 package vn.hoidanit.jobhunter.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import com.turkraft.springfilter.boot.Filter;
 import vn.hoidanit.jobhunter.DTO.response.ResCreateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Job;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.jobService;
 
 @RestController
@@ -56,18 +58,20 @@ public class jobController {
     }
 
     @PostMapping("/jobs/create")
-    public ResponseEntity<ResCreateJobDTO> createJoḅ̣̣(@RequestBody Job job) {
-        
-            // this.jobService.handleCreateJob(job);
+    public ResponseEntity<ResCreateJobDTO> createJoḅ̣̣(@RequestBody Job job)
+            throws IdInvalidException {
+                List<Job> jobList = jobService.findByName(job.getName());
+                if(jobList.size() > 1){
+                    throw new IdInvalidException("Job name already exists");
+                }
             return ResponseEntity.ok(this.jobService.handleCreateJob(job));
-     
     }
 
     @PutMapping("/jobs/update")
-    public ResponseEntity<ResCreateJobDTO> updateJob(@RequestBody Job job) {
+    public ResponseEntity<ResCreateJobDTO> updateJob(@RequestBody Job job) throws IdInvalidException {
         Optional<Job> jobOptional = jobService.handleGetJobByID(job.getId());
         if(!jobOptional.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found");
+            throw  new IdInvalidException("Job not found");
         }
         return ResponseEntity.ok(jobService.handleCreateJob(job));
       

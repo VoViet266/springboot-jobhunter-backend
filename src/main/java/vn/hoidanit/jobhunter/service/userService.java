@@ -31,7 +31,7 @@ public class userService {
 
     public Optional<User> handleGetUserByID(Long id) {
         Optional<User> user = this.userRepository.findById(id);
-        return user.ofNullable(null);
+        return Optional.ofNullable(user.orElse(null));
     }
 
     public ResultPaginationDTO handleAllGetUser(Specification<User> specification, Pageable pageable) {
@@ -67,13 +67,11 @@ public class userService {
         return resultPaginationDTO;
     }
 
-    public Boolean handleDeleteUser(Long id) {
+    public void handleDeleteUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             this.userRepository.delete(user.get());
-            return true;
         }
-        return false;
     }
 
     public User handleGetUserByEmail(String email) {

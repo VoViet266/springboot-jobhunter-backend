@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import vn.hoidanit.jobhunter.DTO.response.ResCreateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResUpdateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.Entity.Job;
 import vn.hoidanit.jobhunter.Entity.Skill;
-import vn.hoidanit.jobhunter.Entity.Company;
 import vn.hoidanit.jobhunter.repository.jobRepository;
 import vn.hoidanit.jobhunter.repository.skillRepository;
 
@@ -38,6 +38,10 @@ public class jobService {
 
     public List<Job> findByIdIn() {
         return this.jobRepository.findAll();
+    }
+
+    public List<Job> findByName(String name) {
+        return this.jobRepository.findByName(name);
     }
 
 
@@ -96,8 +100,9 @@ public class jobService {
                 curentJob.getCreatedBy(),
                 curentJob.getUpdatedBy(),
                 curentJob.getCompany() != null
-                        ? new ResCreateJobDTO.CompanyJob(curentJob.getCompany()
-                                .getId(),
+                        ? new ResCreateJobDTO.CompanyJob(
+                                curentJob.getCompany()
+                                         .getId(),
                                 curentJob.getCompany()
                                         .getName())
                         : null,

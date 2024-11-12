@@ -21,8 +21,10 @@ import vn.hoidanit.jobhunter.DTO.response.ResUpdateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.User;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.userService;
-import vn.hoidanit.jobhunter.service.error.IdInValidException;
+
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -34,34 +36,47 @@ public class userController {
 
     }
 
+    // @ExceptionHandler(value = IdInvalidException.class)
+    // public ResponseEntity<String> handleException(IdInvalidException exception) {
+    //     return ResponseEntity.badRequest().body("cqb3fcv2b3iufvbiu3ybuyvb3yu");
+    // }
+    // @GetMapping("/user/{id}")
+    // public ResponseEntity<User> getU(@PathVariable("id") Long id) throws IdInvalidException {
+    //     if(id < 0){
+    //         throw new IdInvalidException("Id invalid phai lon hon 0");
+    //     }
+    //     return ResponseEntity.ok().body(this.userService.handleGetUserByID(id).get());
+        
+    // }
+    
+
     @GetMapping("/users/{id}")
     public ResponseEntity<ResUserDTO> getUserByID(@PathVariable("id") Long id)
-    throws IdInValidException {
+            throws IdInvalidException {
+    
             Optional<User> user = this.userService.handleGetUserByID(id);
-            if (user.isEmpty()) {
-                throw new IdInValidException("Id not found");
-            }
             return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user.get()));
-       
+
     }
 
     @GetMapping("/users")
     public ResponseEntity<ResultPaginationDTO> getUser(
             @Filter Specification<User> spec,
-            Pageable pageable) 
-            {
-            ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
-            return ResponseEntity.ok(resultPaginationDTO);
-        
+            Pageable pageable) {
+        ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
+        return ResponseEntity.ok(resultPaginationDTO);
+
     }
 
     @DeleteMapping("/users/delete/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id, User user) {
-        if (!this.userService.handleGetUserByID(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id user not found");
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id, User user) 
+            throws IdInvalidException {
+        Optional<User> userExist = this.userService.handleGetUserByID(id);
+        if (!userExist.isPresent()) {
+            throw new IdInvalidException("Id invalid");
         }
         this.userService.handleDeleteUser(id);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body("Delete success");
     }
 
     @PutMapping("/users/update")

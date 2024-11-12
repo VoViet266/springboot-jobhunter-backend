@@ -12,7 +12,7 @@ import lombok.Setter;
 public class RestRespone<T> {
     private int statuscode;
     private String error;
-    private String message;
+    private Object message;
     private T data;
 }
 
