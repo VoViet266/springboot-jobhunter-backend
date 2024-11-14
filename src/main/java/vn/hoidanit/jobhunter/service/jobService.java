@@ -82,6 +82,13 @@ public class jobService {
             List<Skill> skillList = skillRepository.findByIdIn(skills);
             job.setSkills(skillList);
         }
+        if (job.getCompany() != null) {
+            Optional<Company> companyOptional = this.companyService.findById(job.getCompany().getId());
+            if (companyOptional.isPresent()) {
+                job.setCompany(companyOptional.get());
+            }
+        }
+
         Job curentJob = jobRepository.save(job);
         // Khơi tạo ResCreateJobDTO để trả về dữ liệu cho client từ dữ liệu đã lưu
         //Tuy chỉnh lại dữ liệu trả về cho client
@@ -116,7 +123,7 @@ public class jobService {
         return resCreateJobDTO;
     }
 
-    public ResUpdateJobDTO handleUpdateJob(Job job) {
+    public ResUpdateJobDTO handleUpdateJob(Job job, Job jobInDB) {
         Optional<Job> jobExist = this.jobRepository.findById(job.getId());
         if (jobExist.isPresent()) {
             if (job.getSkills() != null) {
@@ -125,11 +132,26 @@ public class jobService {
                         .map(action -> action.getId())
                         .collect(Collectors.toList());
                 List<Skill> skillList = skillRepository.findByIdIn(skills);
-                job.setSkills(skillList);
+                jobInDB.setSkills(skillList);
 
             }
+            if (job.getCompany() != null) {
+                Optional<Company> companyOptional = this.companyService.findById(job.getCompany().getId());
+                if (companyOptional.isPresent()) {
+                    jobInDB.setCompany(companyOptional.get());
+                }
+            }
 
-            Job curentJob = jobRepository.save(job);
+            jobInDB.setName(job.getName());
+            jobInDB.setLocation(job.getLocation());
+            jobInDB.setSalary(job.getSalary());
+            jobInDB.setQuantity(job.getQuantity());
+            jobInDB.setLever(job.getLever());
+            jobInDB.setStartDate(job.getStartDate());
+            jobInDB.setEndDate(job.getEndDate());
+            jobInDB.setActived(job.isActived());
+
+            Job curentJob = jobRepository.save(jobInDB);
             ResUpdateJobDTO resUpdateJobDTO = new ResUpdateJobDTO(
                     curentJob.getId(),
                     curentJob.getName(),

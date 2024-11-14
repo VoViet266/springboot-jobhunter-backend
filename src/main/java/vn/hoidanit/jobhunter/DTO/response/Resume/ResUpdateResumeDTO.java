@@ -6,12 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.hoidanit.jobhunter.util.constant.ResumeStateEnum;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResUpdateResumeDTO {
-    private Instant updatedAt;
-    private String updatedBy;
+    private Long id;
+    private String email;
+    private String url;
+    private ResumeStateEnum status;
+    private Instant updateAt;
+    private String updateBy;
 }

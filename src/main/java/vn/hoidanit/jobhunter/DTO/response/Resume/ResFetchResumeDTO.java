@@ -1,10 +1,11 @@
 package vn.hoidanit.jobhunter.DTO.response.Resume;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.Instant;
 import vn.hoidanit.jobhunter.util.constant.ResumeStateEnum;
 
 @Getter
@@ -20,6 +21,8 @@ public class ResFetchResumeDTO {
     private String updateBy;
     private Instant createdAt;
     private Instant updateAt;
+
+    private String companyName;
     private ResumeUser user;
     private ResumeJob job;
 

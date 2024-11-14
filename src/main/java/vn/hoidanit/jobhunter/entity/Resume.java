@@ -19,7 +19,6 @@ import lombok.Setter;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
 import vn.hoidanit.jobhunter.util.constant.ResumeStateEnum;
 
-
 @Table(name = "resumes")
 @Getter
 @Setter

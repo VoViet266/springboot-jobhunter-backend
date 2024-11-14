@@ -14,21 +14,15 @@ import vn.hoidanit.jobhunter.DTO.response.Resume.ResFetchResumeDTO;
 import vn.hoidanit.jobhunter.DTO.response.Resume.ResUpdateResumeDTO;
 import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Resume;
-import vn.hoidanit.jobhunter.repository.jobRepository;
 import vn.hoidanit.jobhunter.repository.resumeRepository;
-import vn.hoidanit.jobhunter.repository.userRepository;
 
 @Service
 public class resumeService {
     private final resumeRepository resumeRepository;
-    private final userRepository userRepository;
-    private final jobRepository jobRepository;
 
-    public resumeService(resumeRepository resumeRepository, userRepository userRepository,
-            jobRepository jobRepository) {
+    public resumeService(resumeRepository resumeRepository) {
         this.resumeRepository = resumeRepository;
-        this.userRepository = userRepository;
-        this.jobRepository = jobRepository;
+      
     }
 
     public ResCreateResumeDTO createResume(Resume resume) {
@@ -43,8 +37,14 @@ public class resumeService {
     public ResUpdateResumeDTO updateResume(Resume resume) {
         Resume updatedResume = this.resumeRepository.save(resume);
         ResUpdateResumeDTO res = new ResUpdateResumeDTO(
+                updatedResume.getId(),
+                updatedResume.getEmail(),
+                updatedResume.getUrl(),
+                updatedResume.getStatus(),
                 updatedResume.getUpdateAt(),
-                updatedResume.getUpdateBy());
+                updatedResume.getUpdateBy()
+                );
+
         return res;
     }
 
@@ -56,10 +56,6 @@ public class resumeService {
         return this.resumeRepository.findById(id);
     }
 
-    // public boolean isNameExist(String name) {
-    //     return this.resumeRepository.existsByName(name);
-    // }
-
     public ResFetchResumeDTO getResume(Resume resume) {
         ResFetchResumeDTO res = new ResFetchResumeDTO();
         res.setId(resume.getId());
@@ -70,6 +66,9 @@ public class resumeService {
         res.setUpdateBy(resume.getUpdateBy());
         res.setCreatedAt(resume.getCreatedAt());
         res.setUpdateAt(resume.getUpdateAt());
+        if (resume.getJob() != null) {
+            res.setCompanyName(resume.getJob().getCompany().getName());
+        }
 
         res.setUser(new ResFetchResumeDTO.ResumeUser(resume.getUser().getId(), resume.getUser().getUsername()));
         res.setJob(new ResFetchResumeDTO.ResumeJob(resume.getJob().getId(), resume.getJob().getName()));
@@ -83,7 +82,7 @@ public class resumeService {
         }
         boolean userExists = this.resumeRepository.existsById(resume.getUser().getId());
         boolean jobExists = this.resumeRepository.existsById(resume.getJob().getId());
-        if (!userExists || !jobExists) {
+        if(!userExists || !jobExists) {
             return false;
         }
         return true;

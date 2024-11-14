@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.turkraft.springfilter.boot.Filter;
 
 import vn.hoidanit.jobhunter.DTO.response.Jobs.ResCreateJobDTO;
+import vn.hoidanit.jobhunter.DTO.response.Jobs.ResUpdateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Job;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
@@ -68,12 +69,12 @@ public class jobController {
     }
 
     @PutMapping("/jobs/update")
-    public ResponseEntity<ResCreateJobDTO> updateJob(@RequestBody Job job) throws IdInvalidException {
-        Optional<Job> jobOptional = jobService.handleGetJobByID(job.getId());
-        if(!jobOptional.isPresent()){
+    public ResponseEntity<ResUpdateJobDTO> updateJob(@RequestBody Job job) throws IdInvalidException {
+        Optional<Job> currentJob = jobService.handleGetJobByID(job.getId());
+        if(!currentJob.isPresent()){
             throw  new IdInvalidException("Job not found");
         }
-        return ResponseEntity.ok(jobService.handleCreateJob(job));
+        return ResponseEntity.ok(jobService.handleUpdateJob(job, currentJob.get()));
       
     }
 
