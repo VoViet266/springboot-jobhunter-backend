@@ -70,8 +70,8 @@ public class Job {
     private List<Skill> skills;
 
     
-    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("jobs")
+    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("job")
     private List<Resume> resumes;
 
 
