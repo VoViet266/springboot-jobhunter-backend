@@ -8,6 +8,8 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import org.springframework.core.io.Resource;
+
 
 import jakarta.servlet.http.HttpServletResponse;
 import vn.hoidanit.jobhunter.DTO.response.RestRespone;
@@ -34,7 +36,7 @@ public class FomatRestRespone implements ResponseBodyAdvice<Object> {
             ServerHttpResponse response) {
         HttpServletResponse ServletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = ServletResponse.getStatus();
-        if (body instanceof String) {
+        if (body instanceof String || body instanceof Resource) {
             return body;
         }
         RestRespone<Object> res = new RestRespone<>();
