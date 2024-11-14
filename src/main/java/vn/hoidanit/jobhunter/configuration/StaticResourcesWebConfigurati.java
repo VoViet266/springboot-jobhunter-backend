@@ -5,16 +5,17 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import org.springframework.context.annotation.Configuration;
+
 @Configuration
 public class StaticResourcesWebConfigurati
         implements WebMvcConfigurer {
-    @Value("${hoidanit.upload-file.base-path}")
-    private String basePath;
+    @Value("${hoidanit.upload-file.base-uri}")
+    private String baseURI;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/storage/**")
-                .addResourceLocations(basePath);
+                .addResourceLocations(baseURI);
     }
 
 }

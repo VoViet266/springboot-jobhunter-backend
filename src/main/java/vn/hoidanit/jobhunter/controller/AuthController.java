@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import vn.hoidanit.jobhunter.DTO.request.ReqLoginDTO;
-import vn.hoidanit.jobhunter.DTO.response.ResCreateUserDTO;
-import vn.hoidanit.jobhunter.DTO.response.ResLoginDTO;
+import vn.hoidanit.jobhunter.DTO.response.User.ResCreateUserDTO;
+import vn.hoidanit.jobhunter.DTO.response.User.ResLoginDTO;
 import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.authService;
 import vn.hoidanit.jobhunter.service.userService;

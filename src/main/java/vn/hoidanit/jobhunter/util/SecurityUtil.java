@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.DTO.response.ResLoginDTO;
+import vn.hoidanit.jobhunter.DTO.response.User.ResLoginDTO;
 
 // import vn.hoidanit.jobhunter.util.SecretKeyGenerator;
 
@@ -74,11 +74,4 @@ public class SecurityUtil {
                 .map(Authentication::getName);
 
     }
-    // get current user login
-    // public static Optional<String> getCurrentUserJWT() {
-    //     SecurityContext securityContext = SecurityContextHolder.getContext();
-    //     return Optional.ofNullable(securityContext.getAuthentication())
-    //             .map(Authentication::getCredentials)
-    //             .map(Object::toString);
-    // }
 }

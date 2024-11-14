@@ -34,6 +34,9 @@ public class FomatRestRespone implements ResponseBodyAdvice<Object> {
             ServerHttpResponse response) {
         HttpServletResponse ServletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = ServletResponse.getStatus();
+        if (body instanceof String) {
+            return body;
+        }
         RestRespone<Object> res = new RestRespone<>();
         res.setStatuscode(status);
         if (status >= 400) {

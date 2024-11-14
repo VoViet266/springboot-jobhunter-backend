@@ -19,8 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.turkraft.springfilter.boot.Filter;
 
-import vn.hoidanit.jobhunter.DTO.response.ResCreateJobDTO;
-import vn.hoidanit.jobhunter.DTO.response.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.DTO.response.Jobs.ResCreateJobDTO;
+import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.Entity.Job;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.jobService;
