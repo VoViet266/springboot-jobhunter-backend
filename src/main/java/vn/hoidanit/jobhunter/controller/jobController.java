@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.turkraft.springfilter.boot.Filter;
 
+import jakarta.validation.Valid;
 import vn.hoidanit.jobhunter.DTO.response.Jobs.ResCreateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.Jobs.ResUpdateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
@@ -38,9 +39,8 @@ public class jobController {
 
     @GetMapping("/jobs")
     public ResponseEntity<ResultPaginationDTO> getJobs(
-        @Filter Specification<Job> specification,
-        Pageable pageable
-    ) {
+            @Filter Specification<Job> specification,
+            Pageable pageable) {
         try {
             ResultPaginationDTO resultPaginationDTO = jobService.handleGetAllJob(specification, pageable);
             return ResponseEntity.ok(resultPaginationDTO);
@@ -50,39 +50,40 @@ public class jobController {
     }
 
     @GetMapping("/jobs/{id}")
-    public ResponseEntity<Job> getJob(@PathVariable("id") Long id) {
+    public ResponseEntity<Job> getJob(@PathVariable("id") Long id) throws Exception {
         Optional<Job> jobOptional = jobService.handleGetJobByID(id);
-        if(!jobOptional.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found");
+        if (!jobOptional.isPresent()) {
+            throw new Exception("Job not found");
         }
         return ResponseEntity.ok(jobOptional.get());
     }
 
-    @PostMapping("/jobs/create")
+    @PostMapping("/jobs")
     public ResponseEntity<ResCreateJobDTO> createJoḅ̣̣(@RequestBody Job job)
-            throws IdInvalidException {
-                List<Job> jobList = jobService.findByName(job.getName());
-                if(jobList.size() > 1){
-                    throw new IdInvalidException("Job name already exists");
-                }
-            return ResponseEntity.ok(this.jobService.handleCreateJob(job));
+            throws Exception {
+        List<Job> jobList = jobService.findByName(job.getName());
+        if (jobList.size() > 1) {
+            throw new Exception("Job name already exists");
+        }
+        return ResponseEntity.ok(this.jobService.handleCreateJob(job));
     }
 
-    @PutMapping("/jobs/update")
+    @PutMapping("/jobs")
     public ResponseEntity<ResUpdateJobDTO> updateJob(@RequestBody Job job) throws IdInvalidException {
         Optional<Job> currentJob = jobService.handleGetJobByID(job.getId());
-        if(!currentJob.isPresent()){
-            throw  new IdInvalidException("Job not found");
+        if (!currentJob.isPresent()) {
+            throw new IdInvalidException("Job not found");
         }
         return ResponseEntity.ok(jobService.handleUpdateJob(job, currentJob.get()));
-      
+
     }
 
     @DeleteMapping("/jobs/{id}")
-    public ResponseEntity<Void> deleteJob(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteJob(@Valid @PathVariable("id") Long id)
+            throws Exception {
         Optional<Job> jobOptional = jobService.handleGetJobByID(id);
-        if(!jobOptional.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found");
+        if (!jobOptional.isPresent()) {
+            throw new Exception("Job not found");
         }
         jobService.handleDeleteJob(id);
         return ResponseEntity.ok().build();

@@ -34,7 +34,7 @@ public class resumeController {
         this.resumeService = resumeService;
     }
 
-    @PostMapping("/resume")
+    @PostMapping("/resumes")
     public ResponseEntity<ResCreateResumeDTO> createResume(@Valid @RequestBody Resume resume) throws Exception {
         boolean checkIdExist = this.resumeService.checkResumeExistByUserAndJob(resume);
         if (checkIdExist) {
@@ -43,7 +43,7 @@ public class resumeController {
         return ResponseEntity.ok(this.resumeService.createResume(resume));
     }
 
-    @PutMapping("/resume/update")
+    @PutMapping("/resumes")
     public ResponseEntity<ResUpdateResumeDTO> updateResume(@RequestBody Resume resume) throws Exception {
         Optional<Resume> resumeOptional = this.resumeService.getResumeById(resume.getId());
         if (!resumeOptional.isPresent()) {
@@ -65,7 +65,7 @@ public class resumeController {
         return ResponseEntity.ok(this.resumeService.updateResume(reqResume));
     }
 
-    @DeleteMapping("/resume/{id}")
+    @DeleteMapping("/resumes/{id}")
     public ResponseEntity<String> deleteResume(@PathVariable("id") Long id) throws Exception {
         Optional<Resume> resumeOptional = this.resumeService.getResumeById(id);
         if (!resumeOptional.isPresent()) {
@@ -75,7 +75,7 @@ public class resumeController {
         return ResponseEntity.ok("Xóa thành công");
     }
 
-    @GetMapping("/resume/{id}")
+    @GetMapping("/resumes/{id}")
     public ResponseEntity<ResFetchResumeDTO> getResumeById(@Valid @PathVariable("id") Long id) throws Exception {
         Optional<Resume> resumeOptional = this.resumeService.getResumeById(id);
         if (!resumeOptional.isPresent()) {
@@ -87,16 +87,15 @@ public class resumeController {
         res.setUrl(resumeOptional.get().getUrl());
         res.setStatus(resumeOptional.get().getStatus());
         res.setCreatedBy(resumeOptional.get().getCreatedBy());
-        res.setUpdateBy(resumeOptional.get().getUpdateBy());
+        res.setUpdateBy(resumeOptional.get().getUpdatedBy());
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/resume")
+    @GetMapping("/resumes")
     public ResponseEntity<ResultPaginationDTO > getAllResume (
         @Filter Specification<Resume> spec,
          Pageable pageable
     )  {
-        
             ResultPaginationDTO resultPaginationDTO = resumeService.getAllResume(spec, pageable);
             return ResponseEntity.ok(resultPaginationDTO);
       

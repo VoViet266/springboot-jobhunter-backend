@@ -24,8 +24,6 @@ import vn.hoidanit.jobhunter.Entity.User;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.userService;
 
-
-
 @RestController
 @RequestMapping("/api/v1")
 public class userController {
@@ -33,29 +31,17 @@ public class userController {
 
     public userController(userService userService) {
         this.userService = userService;
-
     }
-
-    // @ExceptionHandler(value = IdInvalidException.class)
-    // public ResponseEntity<String> handleException(IdInvalidException exception) {
-    //     return ResponseEntity.badRequest().body("cqb3fcv2b3iufvbiu3ybuyvb3yu");
-    // }
-    // @GetMapping("/user/{id}")
-    // public ResponseEntity<User> getU(@PathVariable("id") Long id) throws IdInvalidException {
-    //     if(id < 0){
-    //         throw new IdInvalidException("Id invalid phai lon hon 0");
-    //     }
-    //     return ResponseEntity.ok().body(this.userService.handleGetUserByID(id).get());
-        
-    // }
     
-
     @GetMapping("/users/{id}")
     public ResponseEntity<ResUserDTO> getUserByID(@PathVariable("id") Long id)
             throws IdInvalidException {
-    
-            Optional<User> user = this.userService.handleGetUserByID(id);
-            return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user.get()));
+
+        Optional<User> user = this.userService.handleGetUserByID(id);
+        if (!user.isPresent()) {
+            throw new IdInvalidException("Id invalid");
+        }
+        return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user.get()));
 
     }
 
@@ -65,28 +51,28 @@ public class userController {
             Pageable pageable) {
         ResultPaginationDTO resultPaginationDTO = this.userService.handleAllGetUser(spec, pageable);
         return ResponseEntity.ok(resultPaginationDTO);
-
     }
 
     @DeleteMapping("/users/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id, User user) 
-            throws IdInvalidException {
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id, User user)
+            throws Exception {
         Optional<User> userExist = this.userService.handleGetUserByID(id);
         if (!userExist.isPresent()) {
-            throw new IdInvalidException("Id invalid");
+            throw new Exception("User not existing");
         }
         this.userService.handleDeleteUser(id);
         return ResponseEntity.ok().body("Delete success");
     }
 
     @PutMapping("/users/update")
-    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed) {
+    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed)
+            throws Exception {
         Optional<User> userExist = this.userService.handleGetUserByID(userRed.getId());
         if (userExist.isPresent()) {
             return ResponseEntity.ok()
                     .body(this.userService.convertToResUpdateUserDTO(this.userService.handleUpdateUser(userRed)));
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not existing");
+            throw new Exception("User not existing");
         }
     }
 }

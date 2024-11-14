@@ -41,14 +41,15 @@ public class resumeService {
                 updatedResume.getEmail(),
                 updatedResume.getUrl(),
                 updatedResume.getStatus(),
-                updatedResume.getUpdateAt(),
-                updatedResume.getUpdateBy()
+                updatedResume.getUpdatedAt(),
+                updatedResume.getUpdatedBy()
                 );
 
         return res;
     }
 
     public void deleteResume(Long id) {
+        // remove job from resume
         this.resumeRepository.deleteById(id);
     }
 
@@ -63,9 +64,9 @@ public class resumeService {
         res.setUrl(resume.getUrl());
         res.setStatus(resume.getStatus());
         res.setCreatedBy(resume.getCreatedBy());
-        res.setUpdateBy(resume.getUpdateBy());
+        res.setUpdateBy(resume.getUpdatedBy());
         res.setCreatedAt(resume.getCreatedAt());
-        res.setUpdateAt(resume.getUpdateAt());
+        res.setUpdateAt(resume.getUpdatedAt());
         if (resume.getJob() != null) {
             res.setCompanyName(resume.getJob().getCompany().getName());
         }

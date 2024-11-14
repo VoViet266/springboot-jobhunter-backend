@@ -35,9 +35,9 @@ public class Resume {
     private String url;
     private ResumeStateEnum status;
     private Instant createdAt;
-    private Instant updateAt;
+    private Instant updatedAt;
     private String createdBy;
-    private String updateBy;
+    private String updatedBy;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -57,10 +57,10 @@ public class Resume {
 
     @PreUpdate
     public void handleBeforeUpdate() {
-        this.updateBy = SecurityUtil.getCurrentUserLogin().isPresent()
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent()
                 ? SecurityUtil.getCurrentUserLogin().get()
                 : "";
-        this.updateAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
 }

@@ -44,13 +44,15 @@ public class jobService {
         return this.jobRepository.findByName(name);
     }
 
-
     // Hàm xử lý lấy tất cả công việc
     // Hàm này sẽ trả về một đối tượng ResultPaginationDTO
-    // ResultPaginationDTO chứa thông tin về trang hiện tại, số trang, tổng số phần tử và dữ liệu
-    //@Filter là một annotation của thư viện spring-filter giúp xử lý các tham số filter truyền vào từ client   
+    // ResultPaginationDTO chứa thông tin về trang hiện tại, số trang, tổng số phần
+    // tử và dữ liệu
+    // @Filter là một annotation của thư viện spring-filter giúp xử lý các tham số
+    // filter truyền vào từ client
     // Pageable là một interface của Spring Data giúp xử lý phân trang
-    // Pageable sẽ chứa thông tin về trang hiện tại, số phần tử trên mỗi trang, sắp xếp dữ liệu
+    // Pageable sẽ chứa thông tin về trang hiện tại, số phần tử trên mỗi trang, sắp
+    // xếp dữ liệu
     // Pageable sẽ được truyền vào hàm findAll của jobRepository để lấy dữ liệu
     public ResultPaginationDTO handleGetAllJob(Specification<Job> specification, Pageable pageable) {
         Page<Job> jobPage = this.jobRepository.findAll(specification, pageable);
@@ -91,7 +93,7 @@ public class jobService {
 
         Job curentJob = jobRepository.save(job);
         // Khơi tạo ResCreateJobDTO để trả về dữ liệu cho client từ dữ liệu đã lưu
-        //Tuy chỉnh lại dữ liệu trả về cho client
+        // Tuy chỉnh lại dữ liệu trả về cho client
         ResCreateJobDTO resCreateJobDTO = new ResCreateJobDTO(
                 curentJob.getId(),
                 curentJob.getName(),
@@ -109,7 +111,7 @@ public class jobService {
                 curentJob.getCompany() != null
                         ? new ResCreateJobDTO.CompanyJob(
                                 curentJob.getCompany()
-                                         .getId(),
+                                        .getId(),
                                 curentJob.getCompany()
                                         .getName())
                         : null,
@@ -184,6 +186,12 @@ public class jobService {
     }
 
     public void handleDeleteJob(Long id) {
+
+        // remove job from resume
+        Optional<Job> job = this.jobRepository.findById(id);
+        Job currentJob = job.get();
+        currentJob.getResumes().forEach(resume -> resume.setJob(null));
+
         this.jobRepository.deleteById(id);
     }
 }
