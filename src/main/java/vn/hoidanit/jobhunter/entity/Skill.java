@@ -48,19 +48,16 @@ public class Skill {
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil
-        .getCurrentUserLogin()
-        .isPresent() 
+        .getCurrentUserLogin().isPresent() 
         ? SecurityUtil.getCurrentUserLogin().get() 
         : "system";
-
         this.createdAt = Instant.now();
     }
 
     @PreUpdate
     public void handleBeforeUpdate() {
         this.updatedBy = SecurityUtil
-        .getCurrentUserLogin()
-        .isPresent() 
+        .getCurrentUserLogin().isPresent() 
         ? SecurityUtil.getCurrentUserLogin().get() 
         : "system";
     }

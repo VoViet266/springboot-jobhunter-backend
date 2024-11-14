@@ -42,6 +42,8 @@ public class SecurityConfiguration {
     @SuppressWarnings("deprecation")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        String[] whiteList = {"/", "/api/v1/auth/**", "/storage/**", "/api/v1/jobs/**", "/api/v1/companies/**" };
         http
                 .csrf(c -> c.disable())
                 
@@ -50,7 +52,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(
                         authz -> authz
                                 // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
-                                .requestMatchers("/api/v1/auth/**", "/", "storage/**")
+                                .requestMatchers(whiteList)
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

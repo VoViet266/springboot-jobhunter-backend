@@ -1,20 +1,13 @@
 package vn.hoidanit.jobhunter.Entity;
 
 import java.time.Instant;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -24,49 +17,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
-import vn.hoidanit.jobhunter.util.constant.GenderEnum;
+import vn.hoidanit.jobhunter.util.constant.ResumeStateEnum;
 
-@Setter
+
+@Table(name = "resumes")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
-
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "username", nullable = false)
-    private String username;
-
-    @Column(name = "email", nullable = false)
-    @NotBlank(message = "Email is required")
+    @NotBlank(message = "email khong duoc de trong")
     private String email;
-    @NotBlank(message = "Password is required")
-    @Column(name = "password", nullable = false)
-    private String password;
-    private int age;
-    @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
-    private String address;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
+    @NotBlank(message = "url khong duoc de trong")
+    private String url;
+    private ResumeStateEnum status;
     private Instant createdAt;
-    private Instant updatedAt;
+    private Instant updateAt;
     private String createdBy;
-    private String updatedBy;
+    private String updateBy;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-    private Company company;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "user", fetch = jakarta.persistence.FetchType.LAZY)
-    @JsonIgnore
-    List<Resume> resumes;
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
 
-    
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent()
@@ -77,10 +58,10 @@ public class User {
 
     @PreUpdate
     public void handleBeforeUpdate() {
-        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent()
+        this.updateBy = SecurityUtil.getCurrentUserLogin().isPresent()
                 ? SecurityUtil.getCurrentUserLogin().get()
                 : "";
-        this.updatedAt = Instant.now();
+        this.updateAt = Instant.now();
     }
 
 }

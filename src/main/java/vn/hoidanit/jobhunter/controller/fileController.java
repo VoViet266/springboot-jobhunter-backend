@@ -36,10 +36,13 @@ public class fileController {
     public ResponseEntity<ResUploadFileDTO> uploadFile(
             @RequestParam("file") MultipartFile file,
             @RequestParam("folder") String folder) throws IOException, Exception {
-        if (file.isEmpty() || file == null) {
+        if (file.isEmpty()) {
             throw new Exception("File is empty");
         }
         String fileName = file.getOriginalFilename();
+        if (fileName == null) {
+            throw new Exception("File name is null");
+        }
         List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "pdf", "doc", "docx");
         Boolean isAllowed = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
 
