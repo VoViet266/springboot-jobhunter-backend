@@ -186,12 +186,12 @@ public class jobService {
     }
 
     public void handleDeleteJob(Long id) {
-
         // remove job from resume
         Optional<Job> job = this.jobRepository.findById(id);
-        Job currentJob = job.get();
-        currentJob.getResumes().forEach(resume -> resume.setJob(null));
-
-        this.jobRepository.deleteById(id);
+        if (job.isPresent()) {
+            Job currentJob = job.get();
+            currentJob.getResumes().forEach(resume -> resume.setJob(null));
+            this.jobRepository.deleteById(id);
+        }
     }
 }

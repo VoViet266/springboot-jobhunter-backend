@@ -83,10 +83,7 @@ public class resumeService {
         }
         boolean userExists = this.resumeRepository.existsById(resume.getUser().getId());
         boolean jobExists = this.resumeRepository.existsById(resume.getJob().getId());
-        if(!userExists || !jobExists) {
-            return false;
-        }
-        return true;
+        return !(!userExists || !jobExists);
     }
 
     public ResultPaginationDTO getAllResume(
