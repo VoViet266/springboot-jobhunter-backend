@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import vn.hoidanit.jobhunter.Entity.User;
+import vn.hoidanit.jobhunter.entity.User;
 
 /**
  *
@@ -19,4 +19,5 @@ public interface userRepository extends JpaRepository<User, Long>, JpaSpecificat
     User findByEmail(String email);
     User findById(long id);
     Boolean existsByEmail(String email);
+    User findByRefreshTokenAndEmail(String refreshToken, String email);
 }

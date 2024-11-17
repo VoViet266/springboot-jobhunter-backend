@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.Entity;
+package vn.hoidanit.jobhunter.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

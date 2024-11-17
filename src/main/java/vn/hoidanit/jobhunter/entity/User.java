@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.Entity;
+package vn.hoidanit.jobhunter.entity;
 
 import java.time.Instant;
 import java.util.List;
@@ -66,6 +66,9 @@ public class User {
     @JsonIgnore
     List<Resume> resumes;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
     
     @PrePersist
     public void handleBeforeCreate() {

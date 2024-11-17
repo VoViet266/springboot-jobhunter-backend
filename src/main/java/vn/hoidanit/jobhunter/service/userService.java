@@ -14,18 +14,21 @@ import vn.hoidanit.jobhunter.DTO.response.User.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.User.ResUpdateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.User.ResUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
-import vn.hoidanit.jobhunter.Entity.Company;
-import vn.hoidanit.jobhunter.Entity.User;
+import vn.hoidanit.jobhunter.entity.Company;
+import vn.hoidanit.jobhunter.entity.Role;
+import vn.hoidanit.jobhunter.entity.User;
 import vn.hoidanit.jobhunter.repository.userRepository;
 
 @Service
 public class userService {
     private final userRepository userRepository;
     private final companyService companyService;
+    private final roleService roleService;
 
-    public userService(userRepository userRepository, companyService companyService) {
+    public userService(userRepository userRepository, companyService companyService, roleService roleService) {
         this.userRepository = userRepository;
         this.companyService = companyService;
+        this.roleService = roleService;
 
     }
 
@@ -60,6 +63,11 @@ public class userService {
                                 ? new ResUserDTO.CompanyUser(
                                         action.getCompany().getId() != null ? action.getCompany().getId() : null,
                                         action.getCompany().getName() != null ? action.getCompany().getName() : null)
+                                : null,
+                        action.getRole() != null
+                                ? new ResUserDTO.RoleUser(
+                                        action.getRole().getId() != null ? action.getRole().getId() : null,
+                                        action.getRole().getName() != null ? action.getRole().getName() : null)
                                 : null))
                 .collect(Collectors.toList());
         resultPaginationDTO.setResult(listUser);
@@ -77,6 +85,9 @@ public class userService {
     public User handleGetUserByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
+    public User getUserByRefeshTokenAndEmail(String email, String refreshToken) {
+        return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
+    }
 
     public User handleUpdateUser(User updatedUser) {
         User currentUser = this.handleGetUserByID(updatedUser.getId()).get();
@@ -90,6 +101,10 @@ public class userService {
             if (updatedUser.getCompany() != null) {
                 Optional<Company> companyOptional = this.companyService.findById(updatedUser.getCompany().getId());
                 currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
+            }
+            if (updatedUser.getRole() != null) {
+                Optional<Role> roleOptional = this.roleService.findById(updatedUser.getRole().getId());
+                currentUser.setRole(roleOptional != null ? roleOptional.get() : null);
             }
             currentUser = this.userRepository.save(currentUser);
         }
@@ -138,6 +153,7 @@ public class userService {
     public ResUserDTO convertToResUserDTO(User user) {
         ResUserDTO resUserDTO = new ResUserDTO();
         ResUserDTO.CompanyUser companyUser = new ResUserDTO.CompanyUser();
+        ResUserDTO.RoleUser roleUser = new ResUserDTO.RoleUser();
 
         resUserDTO.setId(user.getId());
         resUserDTO.setEmail(user.getEmail());
@@ -152,6 +168,11 @@ public class userService {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             resUserDTO.setCompany(companyUser);
+        }
+        if (user.getRole() != null) {
+            roleUser.setId(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+            resUserDTO.setRole(roleUser);
         }
         return resUserDTO;
     }

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.turkraft.springfilter.boot.Filter;
 
@@ -23,7 +21,7 @@ import jakarta.validation.Valid;
 import vn.hoidanit.jobhunter.DTO.response.Jobs.ResCreateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.Jobs.ResUpdateJobDTO;
 import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
-import vn.hoidanit.jobhunter.Entity.Job;
+import vn.hoidanit.jobhunter.entity.Job;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.jobService;
 
@@ -41,12 +39,8 @@ public class jobController {
     public ResponseEntity<ResultPaginationDTO> getJobs(
             @Filter Specification<Job> specification,
             Pageable pageable) {
-        try {
-            ResultPaginationDTO resultPaginationDTO = jobService.handleGetAllJob(specification, pageable);
-            return ResponseEntity.ok(resultPaginationDTO);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
-        }
+        ResultPaginationDTO resultPaginationDTO = jobService.handleGetAllJob(specification, pageable);
+        return ResponseEntity.ok(resultPaginationDTO);
     }
 
     @GetMapping("/jobs/{id}")
@@ -79,13 +73,13 @@ public class jobController {
     }
 
     @DeleteMapping("/jobs/{id}")
-    public ResponseEntity<Void> deleteJob(@Valid @PathVariable("id") Long id)
+    public ResponseEntity<Void> deleteJob(@Valid @PathVariable Long id)
             throws Exception {
         Optional<Job> jobOptional = jobService.handleGetJobByID(id);
         if (!jobOptional.isPresent()) {
             throw new Exception("Job not found");
         }
         jobService.handleDeleteJob(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

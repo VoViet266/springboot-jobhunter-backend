@@ -18,8 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import vn.hoidanit.jobhunter.DTO.response.File.ResUploadFileDTO;
 import vn.hoidanit.jobhunter.service.fileService;
-import vn.hoidanit.jobhunter.DTO.response.file.ResUploadFileDTO;
 
 @RestController
 @RequestMapping("/api/v1")

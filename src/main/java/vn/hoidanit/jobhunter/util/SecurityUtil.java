@@ -2,6 +2,8 @@ package vn.hoidanit.jobhunter.util;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,10 +12,14 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
+
+
 
 import vn.hoidanit.jobhunter.DTO.response.User.ResLoginDTO;
 
@@ -29,23 +35,30 @@ public class SecurityUtil {
     }
 
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS256;
-    // @Value("${hoidanit.jwt.base64-secret}")
-    // private String jwtKey;
+    @Value("${hoidanit.jwt.base64-secret}")
+    private String jwtKey;
 
     @Value("${hoidanit.jwt.access-token-validity-in-seconds}")
     private Long accessTokenExpiration;
     @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
-    public String createAccessToken(Authentication authentication, ResLoginDTO.UserLogin restLoginDTO) {
+    public String createAccessToken(String email, ResLoginDTO  restLoginDTO) {
+        ResLoginDTO.UserInsideToken userToken = new ResLoginDTO.UserInsideToken(
+            restLoginDTO.getUser().getId(),
+            restLoginDTO.getUser().getName(),
+            restLoginDTO.getUser().getEmail());
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
-
+            List<String> listAuthorities =  new ArrayList<>();
+            listAuthorities.add("ROLE_USER_CREATE");
+            listAuthorities.add("ROLE_USER_UPDATE");
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(authentication.getName())
+                .subject(email)
                 .issuedAt(now)
                 .expiresAt(validity)
-                .claim("User", restLoginDTO)
+                .claim("User", userToken)
+                .claim("authorities", listAuthorities)  
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(
@@ -74,4 +87,17 @@ public class SecurityUtil {
                 .map(Authentication::getName);
 
     }
+//   private SecretKey getSecretKey() {
+//         byte[] keyBytes = Base64.from(jwtKey).decode();
+//         return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITHM.getName());
+//     }
+        // check xem token co hop le khong va giai ma token de lay thong tin user
+    //    public Claims checkValidRefreshToken(String token) {
+    //     return Jwts.parserBuilder()
+    //             .setSigningKey(jwtKey)
+    //             .build()
+    //             .parseClaimsJws(token)
+    //             .getBody();
+    //    }
 }
+

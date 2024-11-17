@@ -20,46 +20,49 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
 
-
-
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "skills")
-public class Skill {
-
+@Table(name = "permissions")
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
+    private String apiPath;
+    private String method;
+    private String module;
     private Instant createdAt;
-    private Instant updatedAt;
     private String createdBy;
+    private Instant updatedAt;
     private String updatedBy;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "skills")
+    @ManyToMany(fetch= FetchType.LAZY, mappedBy = "permissions")
     @JsonIgnore
-    private List<Job> jobs;
-    
+    private List<Role> roles;
 
-    @PrePersist
+
+     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil
-        .getCurrentUserLogin().isPresent() 
+        .getCurrentUserLogin()
+        .isPresent() 
         ? SecurityUtil.getCurrentUserLogin().get() 
         : "system";
+
         this.createdAt = Instant.now();
     }
 
     @PreUpdate
     public void handleBeforeUpdate() {
         this.updatedBy = SecurityUtil
-        .getCurrentUserLogin().isPresent() 
+        .getCurrentUserLogin()
+        .isPresent() 
         ? SecurityUtil.getCurrentUserLogin().get() 
         : "system";
     }
+
 
 }
