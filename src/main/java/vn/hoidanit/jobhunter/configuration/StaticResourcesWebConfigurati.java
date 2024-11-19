@@ -1,10 +1,9 @@
 package vn.hoidanit.jobhunter.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class StaticResourcesWebConfigurati
@@ -13,7 +12,7 @@ public class StaticResourcesWebConfigurati
     private String baseURI;
 
     @Override
-    public void addResourceHandlers(@SuppressWarnings("null") ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/storage/**")
                 .addResourceLocations(baseURI);
     }

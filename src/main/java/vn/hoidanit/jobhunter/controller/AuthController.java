@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +22,8 @@ import vn.hoidanit.jobhunter.DTO.response.User.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.DTO.response.User.ResLoginDTO;
 import vn.hoidanit.jobhunter.entity.User;
 import vn.hoidanit.jobhunter.service.authService;
-import vn.hoidanit.jobhunter.service.userService;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
+import vn.hoidanit.jobhunter.service.userService;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
 
 @RequestMapping("/api/v1/auth")
@@ -51,21 +50,20 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) {
         try {
-            // UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            //         loginDto.getUsername(),
-            //         loginDto.getPassword());
-            // Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    loginDto.getUsername(),
+                    loginDto.getPassword());
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             ResLoginDTO restLoginDTO = new ResLoginDTO();
             User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
             if (currentUser != null) {
                 ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                         currentUser.getId(),
                         currentUser.getUsername(),
-                        currentUser.getEmail(),
-                        currentUser.getRole());
+                        currentUser.getEmail());
                 restLoginDTO.setUser(userLogin);
             }
-            String accesss_Token = this.securityUtil.createAccessToken(loginDto.getUsername(), restLoginDTO);
+            String accesss_Token = this.securityUtil.createAccessToken(authentication, restLoginDTO.getUser());
             restLoginDTO.setAccessToken(accesss_Token);
             String refresh_token = this.securityUtil.createRefeshToken(loginDto.getUsername(), restLoginDTO);
             // update refresh token
@@ -130,7 +128,7 @@ public class AuthController {
             userLogin.setId(userCurent.getId());
             userLogin.setEmail(userCurent.getEmail());
             userLogin.setName(userCurent.getUsername());
-            userLogin.setRole(userCurent.getRole());
+            // userLogin.setRole(userCurent.getRole());
             userGetAccount.setUser(userLogin);
         }
         return ResponseEntity.ok(userGetAccount);
