@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.DTO.response.file;
+package vn.hoidanit.jobhunter.dto.response.file;
 
 import java.time.Instant;
 

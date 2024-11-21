@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.hoidanit.jobhunter.DTO.request.GenerateContentRequest;
-import vn.hoidanit.jobhunter.DTO.response.GenerateContentResponse;
+import vn.hoidanit.jobhunter.dto.request.GenerateContentRequest;
+import vn.hoidanit.jobhunter.dto.response.GenerateContentResponse;
 import vn.hoidanit.jobhunter.service.GoogleGenerativeLanguageService;
 
 @RestController

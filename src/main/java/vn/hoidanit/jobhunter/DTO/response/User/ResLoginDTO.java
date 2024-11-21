@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.DTO.response.User;
+package vn.hoidanit.jobhunter.dto.response.User;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,7 +25,7 @@ public class ResLoginDTO {
         private Long id;
         private String name;
         private String email;
-        // private Role role;
+     // private Role role;
         
 
     }

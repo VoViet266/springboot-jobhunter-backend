@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.turkraft.springfilter.boot.Filter;
 
-import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Skill;
 import vn.hoidanit.jobhunter.service.skillService;
 

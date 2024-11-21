@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.DTO.request;
+package vn.hoidanit.jobhunter.dto.request;
 
 import java.util.List;
 

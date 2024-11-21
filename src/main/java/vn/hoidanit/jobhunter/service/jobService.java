@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.DTO.response.Jobs.ResCreateJobDTO;
-import vn.hoidanit.jobhunter.DTO.response.Jobs.ResUpdateJobDTO;
-import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.dto.response.Jobs.ResCreateJobDTO;
+import vn.hoidanit.jobhunter.dto.response.Jobs.ResUpdateJobDTO;
+import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Company;
 import vn.hoidanit.jobhunter.entity.Job;
 import vn.hoidanit.jobhunter.entity.Skill;

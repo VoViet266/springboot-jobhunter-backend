@@ -9,10 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.jobhunter.DTO.response.Resume.ResCreateResumeDTO;
-import vn.hoidanit.jobhunter.DTO.response.Resume.ResFetchResumeDTO;
-import vn.hoidanit.jobhunter.DTO.response.Resume.ResUpdateResumeDTO;
-import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.dto.response.Resume.ResCreateResumeDTO;
+import vn.hoidanit.jobhunter.dto.response.Resume.ResFetchResumeDTO;
+import vn.hoidanit.jobhunter.dto.response.Resume.ResUpdateResumeDTO;
+import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Resume;
 import vn.hoidanit.jobhunter.repository.resumeRepository;
 

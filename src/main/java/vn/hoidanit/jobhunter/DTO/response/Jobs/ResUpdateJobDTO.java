@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.DTO.response.Jobs;
+package vn.hoidanit.jobhunter.dto.response.Jobs;
 
 import java.time.Instant;
 import java.util.List;

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkraft.springfilter.boot.Filter;
 
-import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Company;
 import vn.hoidanit.jobhunter.service.companyService;
 

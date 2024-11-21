@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
-import vn.hoidanit.jobhunter.DTO.response.Jobs.ResCreateJobDTO;
-import vn.hoidanit.jobhunter.DTO.response.Jobs.ResUpdateJobDTO;
-import vn.hoidanit.jobhunter.DTO.response.page.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.dto.response.Jobs.ResCreateJobDTO;
+import vn.hoidanit.jobhunter.dto.response.Jobs.ResUpdateJobDTO;
+import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Job;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.jobService;

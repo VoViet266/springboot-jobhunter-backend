@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletResponse;
-import vn.hoidanit.jobhunter.DTO.response.RestRespone;
+import vn.hoidanit.jobhunter.dto.response.RestRespone;
 
 @ControllerAdvice
 public class FomatRestRespone implements ResponseBodyAdvice<Object> {

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import vn.hoidanit.jobhunter.DTO.response.RestRespone;
+import vn.hoidanit.jobhunter.dto.response.RestRespone;
 
 
 @RestControllerAdvice

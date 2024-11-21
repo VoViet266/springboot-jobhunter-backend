@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.DTO.response.page;
+package vn.hoidanit.jobhunter.dto.response.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

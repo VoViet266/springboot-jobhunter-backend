@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import vn.hoidanit.jobhunter.DTO.response.file.ResUploadFileDTO;
+import vn.hoidanit.jobhunter.dto.response.file.ResUploadFileDTO;
 import vn.hoidanit.jobhunter.service.fileService;
 
 @RestController

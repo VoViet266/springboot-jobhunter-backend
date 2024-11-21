@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import vn.hoidanit.jobhunter.DTO.request.ReqLoginDTO;
-import vn.hoidanit.jobhunter.DTO.response.User.ResCreateUserDTO;
-import vn.hoidanit.jobhunter.DTO.response.User.ResLoginDTO;
+import vn.hoidanit.jobhunter.dto.request.ReqLoginDTO;
+import vn.hoidanit.jobhunter.dto.response.User.ResCreateUserDTO;
+import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
 import vn.hoidanit.jobhunter.entity.User;
 import vn.hoidanit.jobhunter.service.authService;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
@@ -50,23 +50,29 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) {
         try {
+
+            // Xác thực từ username và password của người dùng và trả về đối tượng Authentication object nếu xác thực thành công 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginDto.getUsername(),
                     loginDto.getPassword());
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            // Tạo đối tượng ResLoginDTO để trả về cho người dùng sau khi đăng nhập thành công 
             ResLoginDTO restLoginDTO = new ResLoginDTO();
             User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
             if (currentUser != null) {
                 ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                         currentUser.getId(),
                         currentUser.getUsername(),
-                        currentUser.getEmail());
+                        currentUser.getEmail()
+                        );
                 restLoginDTO.setUser(userLogin);
             }
-            String accesss_Token = this.securityUtil.createAccessToken(authentication, restLoginDTO.getUser());
+            // Tạo access token và refresh token
+            String accesss_Token = this.securityUtil.createAccessToken(authentication.getName(), restLoginDTO);
+            // Set access token vào đối tượng ResLoginDTO để trả về cho người dùng
             restLoginDTO.setAccessToken(accesss_Token);
-            String refresh_token = this.securityUtil.createRefeshToken(loginDto.getUsername(), restLoginDTO);
-            // update refresh token
+            String refresh_token = this.securityUtil.createRefreshToken(loginDto.getUsername(), restLoginDTO);
+            // Cập nhật refresh token vào database
             this.userService.updateUserToken(refresh_token, loginDto.getUsername());
             ResponseCookie springCookie = ResponseCookie.from("refresh_token", refresh_token)
                     .httpOnly(true)
@@ -89,6 +95,7 @@ public class AuthController {
         if (existingUserOpt != null) {
             throw new IdInvalidException("Email already exists");
         }
+        // Tạo mới user và lưu vào database
         User User = new User();
         User.setEmail(user.getEmail());
         User.setUsername(user.getUsername());
@@ -136,24 +143,26 @@ public class AuthController {
 
     // @GetMapping("/refresh-token")
     // public ResponseEntity<ResLoginDTO> refreshToken(
-    //     @CookieValue(name = "refresh_token", defaultValue="none") String refreshToken
+    // @CookieValue(name = "refresh_token", defaultValue="none") String refreshToken
     // ) {
-    //     Jwt decodeToken = this.securityUtil.
-    //     String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+    // Jwt decodeToken = this.securityUtil.
+    // String email = SecurityUtil.getCurrentUserLogin().isPresent() ?
+    // SecurityUtil.getCurrentUserLogin().get() : "";
 
-    //     if (refreshToken.equals("none")) {
-    //         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refresh token is empty");
-    //     }
-    //     ResLoginDTO restLoginDTO = new ResLoginDTO();
-    //    User currentUserDB = this.userService.handleGetUserByEmail(email);
-    //     if (currentUserDB != null) {
-    //         ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
-    //                 currentUserDB.getId(),
-    //                 currentUserDB.getUsername(),
-    //                 currentUserDB.getEmail(),
-    //                 currentUserDB.getRole());
-    //         restLoginDTO.setUser(userLogin);
-    //     }
-       
+    // if (refreshToken.equals("none")) {
+    // throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refresh token is
+    // empty");
+    // }
+    // ResLoginDTO restLoginDTO = new ResLoginDTO();
+    // User currentUserDB = this.userService.handleGetUserByEmail(email);
+    // if (currentUserDB != null) {
+    // ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+    // currentUserDB.getId(),
+    // currentUserDB.getUsername(),
+    // currentUserDB.getEmail(),
+    // currentUserDB.getRole());
+    // restLoginDTO.setUser(userLogin);
+    // }
+
     // }
 }
