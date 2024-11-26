@@ -98,7 +98,7 @@ public class AuthController {
         // Kiểm tra xem email đã tồn tại
         User existingUserOpt = this.userService.handleGetUserByEmail(user.getEmail());
         if (existingUserOpt != null) {
-            throw new IdInvalidException("Email already exists");
+            throw new IdInvalidException("Email: " + user.getEmail() +" already exists");
         }
         // Tạo mới user và lưu vào database
         User User = new User();

@@ -22,14 +22,14 @@ dependencies {
 	//Jpa dùng để tương tác với database
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	// implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springframework.boot:spring-boot-starter-webflux") 
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-	implementation("io.jsonwebtoken:jjwt:0.12.6")
+	// implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+	// implementation("io.jsonwebtoken:jjwt:0.12.6")
 	// Spring filter dùng để filter request theo các điều kiện cần thiết
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
 	// Database

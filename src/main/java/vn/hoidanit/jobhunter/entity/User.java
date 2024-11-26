@@ -66,8 +66,9 @@ public class User {
     @JsonIgnore
     List<Resume> resumes;
 
-    @ManyToOne
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "role_id")
+
     private Role role;
 
     @PrePersist

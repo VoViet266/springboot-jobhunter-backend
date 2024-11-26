@@ -65,8 +65,15 @@ public class roleService {
     }
 
     public void deleteRole(Long id) {
+        Optional<Role> role = this.roleRepository.findById(id);
+       
+            Role currentRole = role.get();
+            currentRole.getUsers().forEach(user -> user.setRole(null));
+            this.roleRepository.deleteById(id);
+        
         this.roleRepository.deleteById(id);
     }
+
 
     public ResultPaginationDTO getRoles(Specification<Role> spec, Pageable pageable) {
         Page<Role> rolesPage = this.roleRepository.findAll(spec, pageable);

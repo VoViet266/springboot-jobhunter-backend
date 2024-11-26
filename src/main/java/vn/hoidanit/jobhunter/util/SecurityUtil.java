@@ -38,108 +38,88 @@ public class SecurityUtil {
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS256;
     @Value("${hoidanit.jwt.base64-secret}")
     private static String jwtKey;
+
+    @Value("${hoidanit.jwt.access-token-validity-in-seconds}")
+    private Long accessTokenExpiration;
+    @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
+    private Long refreshTokenExpiration;
     
-        @Value("${hoidanit.jwt.access-token-validity-in-seconds}")
-        private Long accessTokenExpiration;
-        @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
-        private Long refreshTokenExpiration;
-    
-        // public String createAccessToken(Authentication authentication, ResLoginDTO.UserLogin restLoginDTO) {
-        //     // ResLoginDTO.UserInsideToken userToken = new ResLoginDTO.UserInsideToken(
-        //     //     restLoginDTO.getUser().getId(),
-        //     //     restLoginDTO.getUser().getName(),
-        //     //     restLoginDTO.getUser().getEmail());
-        //     Instant now = Instant.now();
-        //     Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
-               
-        //     JwtClaimsSet claims = JwtClaimsSet.builder()
-        //             .subject(authentication.getName())
-        //             .issuedAt(Instant.now())
-        //             .expiresAt(validity)
-        //             .claim("User", restLoginDTO)
-        //             // .claim("authorities", listAuthorities)  
-        //             .build();
-        //     JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-        //     return this.jwtEncoder.encode(
-        //             JwtEncoderParameters.from(jwsHeader, claims))
-        //             .getTokenValue();
-        public String createAccessToken(String email, ResLoginDTO dto) {
-            Instant now = Instant.now();
-            Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
+    public String createAccessToken(String email, ResLoginDTO dto) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
-             ResLoginDTO.UserInsideToken userToken = new ResLoginDTO.UserInsideToken();
-            userToken.setId(dto.getUser().getId());
-            userToken.setName(dto.getUser().getName());
-            userToken.setEmail(dto.getUser().getEmail());
+        ResLoginDTO.UserInsideToken userToken = new ResLoginDTO.UserInsideToken();
+        userToken.setId(dto.getUser().getId());
+        userToken.setName(dto.getUser().getName());
+        userToken.setEmail(dto.getUser().getEmail());
 
-           
-            List<String> listAuthorities =  new ArrayList<>();
-            listAuthorities.add("ROLE_USER_CREATE");
-            listAuthorities.add("ROLE_USER_UPDATE");
+        List<String> listAuthorities = new ArrayList<>();
+        listAuthorities.add("ROLE_USER_CREATE");
+        listAuthorities.add("ROLE_USER_UPDATE");
 
-            JwtClaimsSet claims = JwtClaimsSet.builder()
-                    .subject(email)
-                    .issuedAt(now)
-                    .expiresAt(validity)
-                    .claim("User", userToken)
-                    .claim("authorities", listAuthorities)
-                    .build();
-            
-            JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-            return this.jwtEncoder.encode(
-                    JwtEncoderParameters.from(jwsHeader, claims))
-                    .getTokenValue();
-        }
-    
-        public String createRefreshToken(String email, ResLoginDTO dto) {
-            Instant now = Instant.now();
-            Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
-            ResLoginDTO.UserInsideToken userToken = new ResLoginDTO.UserInsideToken();
-            userToken.setId(dto.getUser().getId());
-            userToken.setName(dto.getUser().getName());
-            userToken.setEmail(dto.getUser().getEmail());
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(email)
+                .issuedAt(now)
+                .expiresAt(validity)
+                .claim("User", userToken)
+                .claim("authorities", listAuthorities)
+                .build();
 
-           
-            List<String> listAuthorities =  new ArrayList<>();
-            listAuthorities.add("ROLE_USER_CREATE");
-            listAuthorities.add("ROLE_USER_UPDATE");
-            JwtClaimsSet claims = JwtClaimsSet.builder()
-                    .subject(email)
-                    .issuedAt(now)
-                    .expiresAt(validity)
-                    .claim("User", userToken)
-                    .claim("authorities", listAuthorities)
-                    .build();
-            JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-            return this.jwtEncoder.encode(
-                    JwtEncoderParameters.from(jwsHeader, claims))
-                    .getTokenValue();
-        }
-        // get current user login
-        public static Optional<String> getCurrentUserLogin() {
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            return Optional.ofNullable(securityContext.getAuthentication())
-                    .map(Authentication::getName);
-    
-        }
-      private SecretKey getSecretKey() {
-            byte[] keyBytes = Base64.from(jwtKey).decode();
-            return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITHM.getName());
-        }
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters
+                .from(jwsHeader, claims))
+                .getTokenValue();
+    }
 
-    // }
-  
-        public Jwt checkValidRefreshToken(String token) {
-           NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
-                   .withSecretKey(getSecretKey())
-                   .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
-                   .build();
-            try {
-                return jwtDecoder.decode(token);
-            } catch (Exception e) {
-                System.out.println(">>> JWT Error: " + e.getMessage());
-                throw e;
-            }
+    public String createRefreshToken(String email, ResLoginDTO dto) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+        ResLoginDTO.UserInsideToken userToken = new ResLoginDTO.UserInsideToken();
+        userToken.setId(dto.getUser().getId());
+        userToken.setName(dto.getUser().getName());
+        userToken.setEmail(dto.getUser().getEmail());
+
+        List<String> listAuthorities = new ArrayList<>();
+        listAuthorities.add("ROLE_USER_CREATE");
+        listAuthorities.add("ROLE_USER_UPDATE");
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(email)
+                .issuedAt(now)
+                .expiresAt(validity)
+                .claim("User", userToken)
+                .claim("authorities", listAuthorities)
+                .build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        return this.jwtEncoder.encode(
+                JwtEncoderParameters.from(jwsHeader, claims))
+                .getTokenValue();
+    }
+
+    // get current user login
+    public static Optional<String> getCurrentUserLogin() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .map(Authentication::getName);
+
+    }
+    // get secret key from jwtKey 
+    private SecretKey getSecretKey() {
+        byte[] keyBytes = Base64.from(jwtKey).decode();
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITHM.getName());
+    }
+
+
+    // kiểm tra token có hợp lệ không
+    public Jwt checkValidRefreshToken(String token) {
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
+                .withSecretKey(getSecretKey())
+                .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
+                .build();
+        try {
+            return jwtDecoder.decode(token);
+        } catch (Exception e) {
+            System.out.println(">>> JWT Error: " + e.getMessage());
+            throw e;
         }
+    }
 }
-

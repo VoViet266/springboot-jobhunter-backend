@@ -43,10 +43,10 @@ public class PermissionController {
         boolean isPermissionExist = permissionService.isPermissionExist(permission);
 
         if (this.permissionService.getPermissionById(permission.getId()) == null) {
-            throw new Exception("Permission is not exist");
+            throw new Exception("Permission" + permission.getId() + "is not exist");
         }
         if (isPermissionExist) {
-            throw new Exception("Permission is exist");
+            throw new Exception("Permission"+ permission.getId() +" is exist");
         }
         return ResponseEntity.ok(permissionService.updatePermission(permission));
     }
@@ -54,7 +54,7 @@ public class PermissionController {
     @DeleteMapping("/permissions/{id}")
     public ResponseEntity<Void> deletePermission(@PathVariable("id") Long id) throws Exception {
         if (this.permissionService.getPermissionById(id) == null) {
-            throw new Exception("Permission is not exist");
+            throw new Exception("Permission" + id +  "is not exist");
         }
         permissionService.deletePermission(id);
         return ResponseEntity.ok().build();

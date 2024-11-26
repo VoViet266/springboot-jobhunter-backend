@@ -41,7 +41,7 @@ public class skillController {
         }
     }
 
-    @PostMapping("/skills/create")
+    @PostMapping("/skills")
     public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) throws Exception {
         if (skill.getName() != null && this.skillService.isNameExist(skill.getName())) {
             throw new Exception("Skill name already exists!!");
@@ -67,7 +67,7 @@ public class skillController {
         Long currentSkill = this.skillService.handleGetSkillById(id).getId();
         if (currentSkill != null) {
             this.skillService.handleDeleteSkill(currentSkill);
-            return ResponseEntity.status(HttpStatus.OK).body("Skill deleted!!");
+            return ResponseEntity.status(HttpStatus.OK).body("Skill " + id +" deleted!!");
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found!!");
 
