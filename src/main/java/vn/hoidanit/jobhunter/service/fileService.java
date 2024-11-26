@@ -30,7 +30,7 @@ public class fileService {
                 Files.createDirectories(tmpDir.toPath());
                 System.out.println(">>> Directory created: " + path);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new Exception(">>> Directory creation failed: " + path);
             }
         } else {
             System.out.println(">>> Directory existed: " + path);

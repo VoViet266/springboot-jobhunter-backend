@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.3.5"
+	id("org.springframework.boot") version "3.3.6"
 	id("io.spring.dependency-management") version "1.1.6"
 }
 
@@ -29,6 +29,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+	implementation("io.jsonwebtoken:jjwt:0.12.6")
 	// Spring filter dùng để filter request theo các điều kiện cần thiết
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
 	// Database

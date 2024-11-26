@@ -39,17 +39,21 @@ public class RoleController {
    if (this.roleService.existsByName(role.getName())) {
             throw new  Exception("Role name already exists");
         }
+        if(this.roleService.existsByName(role.getName())) {
+            throw new Exception("Role name " + role.getName() + " already exists");
+        }
         return ResponseEntity.ok(this.roleService.createRole(role));
     }
 
     @PutMapping("/roles")
     public ResponseEntity<Role> updateRole(@RequestBody Role role) throws Exception {
-        if(this.roleService.findById(role.getId()).isEmpty()) {
+        Role roleExist = this.roleService.findById(role.getId()).orElse(null);
+        if(roleExist == null) {
             throw new Exception("Role with " + role.getId() +" not found");
         }
-        if(this.roleService.existsByName(role.getName())) {
-            throw new Exception("Role name " + role.getName() + " already exists");
-        }
+        // if(roleExist.getName().equals(role.getName())) {
+        //     throw new Exception("Role name " + role.getName() + " already exists");
+        // }
         return ResponseEntity.ok(this.roleService.updateRole(role));
     }
     

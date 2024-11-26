@@ -106,6 +106,9 @@ public class userService {
                 Optional<Role> roleOptional = this.roleService.findById(updatedUser.getRole().getId());
                 currentUser.setRole(roleOptional != null ? roleOptional.get() : null);
             }
+            if(updatedUser.getResumes() != null) {
+                currentUser.setResumes(updatedUser.getResumes());
+            }
             currentUser = this.userRepository.save(currentUser);
         }
         return currentUser;

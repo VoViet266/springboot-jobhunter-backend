@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,20 +53,23 @@ public class AuthController {
     public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) {
         try {
 
-            // Xác thực từ username và password của người dùng và trả về đối tượng Authentication object nếu xác thực thành công 
+            // Xác thực từ username và password của người dùng và trả về đối tượng
+            // Authentication object nếu xác thực thành công
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginDto.getUsername(),
                     loginDto.getPassword());
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            // Tạo đối tượng ResLoginDTO để trả về cho người dùng sau khi đăng nhập thành công 
+            Authentication authentication = authenticationManagerBuilder
+                    .getObject()
+                    .authenticate(authenticationToken);
+
             ResLoginDTO restLoginDTO = new ResLoginDTO();
             User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
             if (currentUser != null) {
                 ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                         currentUser.getId(),
                         currentUser.getUsername(),
-                        currentUser.getEmail()
-                        );
+                        currentUser.getEmail(),
+                        currentUser.getRole());
                 restLoginDTO.setUser(userLogin);
             }
             // Tạo access token và refresh token
@@ -113,7 +118,7 @@ public class AuthController {
     public ResponseEntity<Void> logout() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         if (email.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is empty ");
         }
         this.userService.updateUserToken("", email);
         ResponseCookie springCookie = ResponseCookie.from("refresh_token", "")
@@ -135,34 +140,50 @@ public class AuthController {
             userLogin.setId(userCurent.getId());
             userLogin.setEmail(userCurent.getEmail());
             userLogin.setName(userCurent.getUsername());
-            // userLogin.setRole(userCurent.getRole());
+            userLogin.setRole(userCurent.getRole());
             userGetAccount.setUser(userLogin);
         }
         return ResponseEntity.ok(userGetAccount);
     }
 
-    // @GetMapping("/refresh-token")
-    // public ResponseEntity<ResLoginDTO> refreshToken(
-    // @CookieValue(name = "refresh_token", defaultValue="none") String refreshToken
-    // ) {
-    // Jwt decodeToken = this.securityUtil.
-    // String email = SecurityUtil.getCurrentUserLogin().isPresent() ?
-    // SecurityUtil.getCurrentUserLogin().get() : "";
+    @GetMapping("/refresh-token")
+    public ResponseEntity<ResLoginDTO> refreshToken(
+            @CookieValue(name = "refresh_token", defaultValue = "none") String refreshToken) {
+        Jwt decodeToken = this.securityUtil.checkValidRefreshToken(refreshToken);
+        String email = decodeToken.getClaim("email");
+        // SecurityUtil.getCurrentUserLogin().get() : "";
 
-    // if (refreshToken.equals("none")) {
-    // throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refresh token is
-    // empty");
-    // }
-    // ResLoginDTO restLoginDTO = new ResLoginDTO();
-    // User currentUserDB = this.userService.handleGetUserByEmail(email);
-    // if (currentUserDB != null) {
-    // ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
-    // currentUserDB.getId(),
-    // currentUserDB.getUsername(),
-    // currentUserDB.getEmail(),
-    // currentUserDB.getRole());
-    // restLoginDTO.setUser(userLogin);
-    // }
+        if (refreshToken.equals("none")) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refresh token is empty");
+        }
+        ResLoginDTO restLoginDTO = new ResLoginDTO();
+        User currentUserDB = this.userService.handleGetUserByEmail(email);
 
-    // }
+        if (currentUserDB != null) {
+            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+                    currentUserDB.getId(),
+                    currentUserDB.getUsername(),
+                    currentUserDB.getEmail(),
+                    currentUserDB.getRole());
+            restLoginDTO.setUser(userLogin);
+        }
+        // Tạo access token và refresh token
+        String accesss_Token = this.securityUtil.createAccessToken(email, restLoginDTO);
+        // Set access token vào đối tượng ResLoginDTO để trả về cho người dùng
+        restLoginDTO.setAccessToken(accesss_Token);
+        String new_refresh_token = this.securityUtil.createRefreshToken(email, restLoginDTO);
+        // Cập nhật refresh token vào database
+        this.userService.updateUserToken(new_refresh_token, email);
+
+        // Tạo cookie
+        ResponseCookie resCookies = ResponseCookie
+                .from("refresh_token", new_refresh_token)
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(refreshTokenExpiration)
+                .path("/")
+                .build();
+        
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, resCookies.toString()).body(restLoginDTO);
+    }
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -12,6 +13,4 @@ import lombok.Setter;
 public class ReqLoginDTO {
     private String username;
     private String password;
-   
-   
 }

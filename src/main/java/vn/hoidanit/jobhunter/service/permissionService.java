@@ -47,8 +47,8 @@ public class permissionService {
             permissionById.setMethod(permission.getMethod());
             permissionById.setApiPath(permission.getApiPath());
             permissionById.setModule(permission.getModule());
-            permissionById = permissionRepository.save(permissionById);
-            return permissionById;
+
+            return permissionRepository.save(permissionById);
         }
         return null;
     }

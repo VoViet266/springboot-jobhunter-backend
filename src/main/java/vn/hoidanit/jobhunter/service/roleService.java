@@ -30,7 +30,7 @@ public class roleService {
         if (role.getPermissions() != null) {
             List<Long> reqPermissions = role.getPermissions()
                     .stream()
-                    .map(Permission::getId)
+                    .map(x -> x.getId())
                     .collect(Collectors.toList());
             List<Permission> dbPermissions = this.permissionRepository.findByIdIn(reqPermissions);
             role.setPermissions(dbPermissions);

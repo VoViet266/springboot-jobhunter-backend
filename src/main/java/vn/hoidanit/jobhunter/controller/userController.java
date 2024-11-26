@@ -66,6 +66,9 @@ public class userController {
     public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed)
             throws Exception {
         Optional<User> userExist = this.userService.handleGetUserByID(userRed.getId());
+        if(userRed.getEmail() != null) {
+            throw new Exception("CAN NOT UPDATE EMAIL");
+        }
         if (userExist.isPresent()) {
             return ResponseEntity.ok()
                     .body(this.userService.convertToResUpdateUserDTO(this.userService.handleUpdateUser(userRed)));

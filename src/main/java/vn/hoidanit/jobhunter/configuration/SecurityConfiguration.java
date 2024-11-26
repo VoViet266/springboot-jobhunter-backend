@@ -43,7 +43,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        String[] whiteList = {"/api/v1/","/", "/api/v1/auth/**", "/storage/**", "/api/v1/jobs/**", "/api/v1/companies/**", "/api/v1/auth/refesh", "/api/v1/auth/account" };
+        String[] whiteList = {"/","/api/v1/hello", "/api/v1/auth/**", "/storage/**", "/api/v1/jobs/**", "/api/v1/companies/**", "/api/v1/auth/refesh", "/api/v1/auth/account" };
         http
                 .csrf(c -> c.disable())
                 
