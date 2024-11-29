@@ -30,6 +30,7 @@ import vn.hoidanit.jobhunter.util.SecurityUtil;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

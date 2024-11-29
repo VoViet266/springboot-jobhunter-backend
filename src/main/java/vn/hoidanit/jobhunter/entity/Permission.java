@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,6 +26,7 @@ import vn.hoidanit.jobhunter.util.SecurityUtil;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "permissions")
 public class Permission {
     @Id
@@ -39,18 +41,17 @@ public class Permission {
     private Instant updatedAt;
     private String updatedBy;
 
-    @ManyToMany(fetch= FetchType.LAZY, mappedBy = "permissions")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "permissions")
     @JsonIgnore
     private List<Role> roles;
 
-
-     @PrePersist
+    @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil
-        .getCurrentUserLogin()
-        .isPresent() 
-        ? SecurityUtil.getCurrentUserLogin().get() 
-        : "system";
+                .getCurrentUserLogin()
+                .isPresent()
+                        ? SecurityUtil.getCurrentUserLogin().get()
+                        : "system";
 
         this.createdAt = Instant.now();
     }
@@ -58,11 +59,10 @@ public class Permission {
     @PreUpdate
     public void handleBeforeUpdate() {
         this.updatedBy = SecurityUtil
-        .getCurrentUserLogin()
-        .isPresent() 
-        ? SecurityUtil.getCurrentUserLogin().get() 
-        : "system";
+                .getCurrentUserLogin()
+                .isPresent()
+                        ? SecurityUtil.getCurrentUserLogin().get()
+                        : "system";
     }
-
 
 }

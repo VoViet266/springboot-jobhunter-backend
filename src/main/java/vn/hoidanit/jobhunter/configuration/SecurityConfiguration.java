@@ -6,6 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,23 +40,78 @@ public class SecurityConfiguration {
 
     // Cau hinh bao mat cho cac api duoc khai bao trong permitAll de khong can phai
     // dang nhap
-    @SuppressWarnings("deprecation")
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        String[] whiteList = {"/","/api/v1/hello", "/api/v1/auth/**", "/storage/**", "/api/v1/jobs/**", "/api/v1/companies/**", "/api/v1/auth/refesh", "/api/v1/auth/account" };
+        String[] whiteList = {};
         http
                 .csrf(c -> c.disable())
-                
                 // Cau hinh cors voi cau hinh mac dinh
                 .cors(Customizer.withDefaults())
-                .authorizeRequests(
-                        authz -> authz
-                                // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
-                                .requestMatchers(whiteList)
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                // .authorizeRequests(
+                // authz -> authz
+                // // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
+                // .requestMatchers("/", "/api/v1/hello", "/storage/**", "/api/v1/jobs/**",
+                // "/api/v1/companies/**", "/api/v1/skills/**",
+                // "/api/v1/auth/refresh", "/api/v1/auth/account",
+                // "/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/**").permitAll()
+
+                // .anyRequest()
+                // .authenticated()
+                .authorizeHttpRequests(
+                        authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/auth/refresh").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/auth/account").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
+                                // .requestMatchers(HttpMethod.GET, "/api/v1/hello").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/users").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").permitAll()
+
+                                .requestMatchers(HttpMethod.POST, "/api/v1/jobs").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/jobs/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/jobs").permitAll()
+                                .requestMatchers(HttpMethod.PUT,    "/api/v1/jobs").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/jobs").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/companies").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/companies").permitAll() 
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/companies/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/skills").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/skills").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/skills").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/skills/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/files/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/files").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/permissions/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/permissions").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/permissions").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/permissions/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/resumes/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/resumes").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/resumes").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/resumes").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/resumes/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/roles/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/roles").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/roles/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/roles").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/roles/**").permitAll()
+
+                                .requestMatchers("/storage/**").permitAll()
+
                 //
                 // oauth2ResourceServer() bao mat cac api duoc khai bao trong permitAll de khong
                 ///// can phai dang nhap
@@ -93,8 +149,5 @@ public class SecurityConfiguration {
             }
         };
     }
-
-
-
 
 }

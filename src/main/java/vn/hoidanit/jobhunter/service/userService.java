@@ -179,6 +179,17 @@ public class userService {
         }
         return resUserDTO;
     }
+    public User handleCreateUser(User user) {
+        if (user.getCompany() != null) {
+            Optional<Company> companyOptional = this.companyService.findById(user.getCompany().getId());
+            user.setCompany(companyOptional != null ? companyOptional.get() : null);
+        }
+        if (user.getRole() != null) {
+            Optional<Role> roleOptional = this.roleService.findById(user.getRole().getId());
+          user.setRole(roleOptional != null ? roleOptional.get() : null);
+        }
+        return this.userRepository.save(user);
+    }
 
     public void updateUserToken(String token, String email) {
         User user = this.userRepository.findByEmail(email);

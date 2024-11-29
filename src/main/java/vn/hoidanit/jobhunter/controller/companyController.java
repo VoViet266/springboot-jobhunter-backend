@@ -58,7 +58,7 @@ public class companyController {
 
     }
 
-    @PostMapping("/companies/create")
+    @PostMapping("/companies")
     public ResponseEntity<Company> createCompany(@RequestBody Company company) {
         try {
             Company newCompany = companyService.handleCreateCompany(company);
@@ -70,15 +70,14 @@ public class companyController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/companies")
     public ResponseEntity<Company> updateCompany(
-        @PathVariable("id") 
-        Long id, 
+    
         @RequestBody Company company) {
         try {
-            Optional<Company> exist = companyService.handleGetCompanyById(id);
+            Optional<Company> exist = companyService.handleGetCompanyById(company.getId());
             if (exist.isPresent()) {
-                Company updatedCompany = companyService.handleUpdateCompany(company, id);
+                Company updatedCompany = companyService.handleUpdateCompany(company, company.getId());
                 return ResponseEntity.ok(updatedCompany);
             } else {
                 return ResponseEntity.notFound().build();

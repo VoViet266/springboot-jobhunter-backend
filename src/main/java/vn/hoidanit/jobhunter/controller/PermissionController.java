@@ -43,7 +43,7 @@ public class PermissionController {
         boolean isPermissionExist = permissionService.isPermissionExist(permission);
 
         if (this.permissionService.getPermissionById(permission.getId()) == null) {
-            throw new Exception("Permission" + permission.getId() + "is not exist");
+            throw new Exception("Permission" + permission.getId() + " is not exist");
         }
         if (isPermissionExist) {
             throw new Exception("Permission"+ permission.getId() +" is exist");

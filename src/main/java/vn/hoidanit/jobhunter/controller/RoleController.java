@@ -36,6 +36,10 @@ public class RoleController {
         return ResponseEntity.ok(this.roleService.getRoles(specification, pageable));
     }
 
+    @GetMapping("/roles/{id}")
+    public ResponseEntity<Role> getRole(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(this.roleService.findById(id).orElse(null));
+    }
     @PostMapping("/roles")
     public ResponseEntity<Role> createRole(@RequestBody Role role)
             throws Exception {
@@ -49,7 +53,7 @@ public class RoleController {
     }
 
     @PutMapping("/roles")
-    public ResponseEntity<Role> updateRole(@RequestBody Role role) throws Exception {
+    public ResponseEntity<Role> updateRole( @RequestBody Role role) throws Exception {
         Role roleExist = this.roleService.findById(role.getId()).orElse(null);
         if (roleExist == null) {
             throw new Exception("Role with " + role.getId() + " not found");
@@ -67,7 +71,7 @@ public class RoleController {
             throw new Exception("Role with " + id + " not found");
         }
         this.roleService.deleteRole(id);
-        return ResponseEntity.ok("Delete role " + id +" success");
+        return ResponseEntity.ok("Delete role " + id + " success");
     }
 
 }
