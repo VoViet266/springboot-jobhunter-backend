@@ -22,10 +22,10 @@ import vn.hoidanit.jobhunter.service.roleService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class RoleController {
+public class roleController {
     private final roleService roleService;
 
-    public RoleController(roleService roleService) {
+    public roleController(roleService roleService) {
         this.roleService = roleService;
     }
 

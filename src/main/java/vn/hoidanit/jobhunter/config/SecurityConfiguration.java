@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.configuration;
+package vn.hoidanit.jobhunter.config;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -43,22 +43,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        String[] whiteList = {};
         http
                 .csrf(c -> c.disable())
                 // Cau hinh cors voi cau hinh mac dinh
                 .cors(Customizer.withDefaults())
-                // .authorizeRequests(
-                // authz -> authz
-                // // bao mat cac api duoc khai bao trong permitAll de khong can phai dang nhap
-                // .requestMatchers("/", "/api/v1/hello", "/storage/**", "/api/v1/jobs/**",
-                // "/api/v1/companies/**", "/api/v1/skills/**",
-                // "/api/v1/auth/refresh", "/api/v1/auth/account",
-                // "/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/**").permitAll()
-
-                // .anyRequest()
-                // .authenticated()
                 .authorizeHttpRequests(
                         authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
@@ -112,7 +100,6 @@ public class SecurityConfiguration {
 
                                 .requestMatchers("/storage/**").permitAll()
 
-                //
                 // oauth2ResourceServer() bao mat cac api duoc khai bao trong permitAll de khong
                 ///// can phai dang nhap
                 ).oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
@@ -132,7 +119,6 @@ public class SecurityConfiguration {
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
     }
-
     // JwtDecoder de giai ma token
     @Bean
     public JwtDecoder jwtDecoder() {

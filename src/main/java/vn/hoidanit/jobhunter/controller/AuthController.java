@@ -30,7 +30,7 @@ import vn.hoidanit.jobhunter.util.SecurityUtil;
 
 @RequestMapping("/api/v1/auth")
 @RestController
-public class AuthController {
+public class authController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtil securityUtil;
@@ -40,7 +40,7 @@ public class AuthController {
     @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
-    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
+    public authController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
             authService authService, userService userService, PasswordEncoder passwordEncoder) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.securityUtil = securityUtil;

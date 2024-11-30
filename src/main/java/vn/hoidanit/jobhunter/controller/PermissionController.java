@@ -20,11 +20,11 @@ import vn.hoidanit.jobhunter.service.permissionService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class PermissionController {
+public class permissionController {
 
     private final permissionService permissionService;
 
-    public PermissionController(permissionService permissionService) {
+    public permissionController(permissionService permissionService) {
         this.permissionService = permissionService;
     }
 

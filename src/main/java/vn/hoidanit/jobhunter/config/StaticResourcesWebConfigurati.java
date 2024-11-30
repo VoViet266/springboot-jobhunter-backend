@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.configuration;
+package vn.hoidanit.jobhunter.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

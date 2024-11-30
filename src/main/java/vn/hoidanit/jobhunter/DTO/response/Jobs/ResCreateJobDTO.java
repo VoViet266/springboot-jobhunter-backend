@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.hoidanit.jobhunter.util.constant.LevelEnum;
+import vn.hoidanit.jobhunter.constant.LevelEnum;
 
 @Setter
 @Getter
