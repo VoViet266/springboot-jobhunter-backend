@@ -43,7 +43,7 @@ public class SecurityUtil {
     private Long accessTokenExpiration;
     @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
-    
+
     public String createAccessToken(String email, ResLoginDTO dto) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
@@ -53,16 +53,16 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
         userToken.setEmail(dto.getUser().getEmail());
 
-        List<String> listAuthorities = new ArrayList<>();
-        listAuthorities.add("ROLE_USER_CREATE");
-        listAuthorities.add("ROLE_USER_UPDATE");
+        // List<String> listAuthorities = new ArrayList<>();
+        // listAuthorities.add("ROLE_USER_CREATE");
+        // listAuthorities.add("ROLE_USER_UPDATE");
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(email)
                 .issuedAt(now)
                 .expiresAt(validity)
                 .claim("User", userToken)
-                .claim("authorities", listAuthorities)
+                // .claim("authorities", listAuthorities)
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -79,15 +79,15 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
         userToken.setEmail(dto.getUser().getEmail());
 
-        List<String> listAuthorities = new ArrayList<>();
-        listAuthorities.add("ROLE_USER_CREATE");
-        listAuthorities.add("ROLE_USER_UPDATE");
+        // List<String> listAuthorities = new ArrayList<>();
+        // listAuthorities.add("ROLE_USER_CREATE");
+        // listAuthorities.add("ROLE_USER_UPDATE");
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(email)
                 .issuedAt(now)
                 .expiresAt(validity)
                 .claim("User", userToken)
-                .claim("authorities", listAuthorities)
+                // .claim("authorities", listAuthorities)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(
@@ -102,12 +102,12 @@ public class SecurityUtil {
                 .map(Authentication::getName);
 
     }
-    // get secret key from jwtKey 
+
+    // get secret key from jwtKey
     private SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITHM.getName());
     }
-
 
     // kiểm tra token có hợp lệ không
     public Jwt checkValidRefreshToken(String token) {

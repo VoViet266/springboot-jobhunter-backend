@@ -37,10 +37,6 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // Cau hinh bao mat cho cac api duoc khai bao trong permitAll de khong can phai
-    // dang nhap
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -100,7 +96,6 @@ public class SecurityConfiguration {
 
                                 .requestMatchers("/storage/**").permitAll()
 
-                // oauth2ResourceServer() bao mat cac api duoc khai bao trong permitAll de khong
                 ///// can phai dang nhap
                 ).oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .formLogin(f -> f.disable())
