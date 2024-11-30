@@ -66,7 +66,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/auth/refresh").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/auth/account").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
-                                // .requestMatchers(HttpMethod.GET, "/api/v1/hello").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/hello").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
