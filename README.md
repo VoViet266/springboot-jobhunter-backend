@@ -1,7 +1,6 @@
 ## Về tác giả
 
 - **Họ và tên:** Võ Quốc Việt
-- **Note:** Đây là bài tập cá nhân của mình, nếu bạn có nhu cầu sử dụng, vui lòng liên hệ mình qua email:
 - **Email:** voviet266@gmail.com
 
 ## Yêu cầu hệ thống
@@ -69,6 +68,7 @@ backend-project/
 │   │   │       ├── config/            # Cấu hình ứng dụng
 │   │   │       ├── controller/        # Các controller xử lý yêu cầu HTTP
 │   │   │       ├── service/           # Các service chứa logic nghiệp vụ
+|   |   |       ├── constant/          # Các biến  
 │   │   │       ├── dto/               # Các đối tượng truyền dữ liệu giữa các lớp
 │   │   │       ├── entity/            # Các entity đại diện cho bảng trong cơ sở dữ liệu
 │   │   │       ├── repository/        # Các repository làm việc với cơ sở dữ liệu
