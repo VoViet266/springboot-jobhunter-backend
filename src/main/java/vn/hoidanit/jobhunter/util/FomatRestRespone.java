@@ -42,12 +42,10 @@ public class FomatRestRespone implements ResponseBodyAdvice<Object> {
           return body;
         }
         else {
-           
             res.setMessage("Success");
             res.setError("No Error");
             res.setData(body);
         }
-
         return res;
     }
 

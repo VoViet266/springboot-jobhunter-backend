@@ -44,10 +44,10 @@ public class jobController {
     }
 
     @GetMapping("/jobs/{id}")
-    public ResponseEntity<Job> getJob(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<Job> getJob(@PathVariable("id") Long id) throws IdInvalidException, Exception {
         Optional<Job> jobOptional = jobService.handleGetJobByID(id);
         if (!jobOptional.isPresent()) {
-            throw new Exception("Job not found");
+            throw new IdInvalidException("Job not found");
         }
         return ResponseEntity.ok(jobOptional.get());
     }
@@ -74,10 +74,10 @@ public class jobController {
 
     @DeleteMapping("/jobs/{id}")
     public ResponseEntity<Void> deleteJob(@Valid @PathVariable Long id)
-            throws Exception {
+            throws IdInvalidException, Exception {
         Optional<Job> jobOptional = jobService.handleGetJobByID(id);
         if (!jobOptional.isPresent()) {
-            throw new Exception("Job not found");
+            throw new IdInvalidException("Job not found");
         }
         jobService.handleDeleteJob(id);
         return ResponseEntity.noContent().build();

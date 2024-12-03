@@ -32,7 +32,6 @@ public class SecurityConfiguration {
     @Value("${hoidanit.jwt.base64-secret}")
     private String jwtKey;
 
-    // Ma hoa mat khau bang bcrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -70,6 +69,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/companies/**").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/skills").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/skills/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/skills").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/skills").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/skills/**").permitAll()

@@ -19,6 +19,7 @@ import com.turkraft.springfilter.boot.Filter;
 import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Skill;
 import vn.hoidanit.jobhunter.service.skillService;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -45,7 +46,7 @@ public class skillController {
     public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) throws Exception {
         if (skill.getName() != null && this.skillService.isNameExist(skill.getName())) {
             throw new Exception("Skill name already exists!!");
-            
+
         }
         return ResponseEntity.ok(this.skillService.handleCreateSkill(skill));
 
@@ -53,24 +54,23 @@ public class skillController {
 
     @PutMapping("/skills")
     public ResponseEntity<Skill> updateSkill(@RequestBody Skill skill)
-    throws Exception {
+            throws Exception {
         Skill currentSkill = this.skillService.handleGetSkillById(skill.getId());
         if (currentSkill == null) {
-           throw new Exception("Skill not found!!");
+            throw new Exception("Skill not found!!");
         }
         return ResponseEntity.ok(this.skillService.handleUpdateSkill(skill));
     }
 
     @DeleteMapping("/skills/{id}")
     public ResponseEntity<String> deleteSkill(@PathVariable("id") Long id)
-    throws Exception {
+            throws IdInvalidException {
         Long currentSkill = this.skillService.handleGetSkillById(id).getId();
         if (currentSkill != null) {
             this.skillService.handleDeleteSkill(currentSkill);
-            return ResponseEntity.status(HttpStatus.OK).body("Skill " + id +" deleted!!");
+            return ResponseEntity.status(HttpStatus.OK).body("Skill " + id + " deleted!!");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found!!");
+        throw new IdInvalidException("Skill  with " + id + " not found!!");
 
-    
     }
 }

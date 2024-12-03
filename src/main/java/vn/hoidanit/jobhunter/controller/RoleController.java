@@ -19,6 +19,7 @@ import com.turkraft.springfilter.boot.Filter;
 import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Role;
 import vn.hoidanit.jobhunter.service.roleService;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -37,9 +38,14 @@ public class roleController {
     }
 
     @GetMapping("/roles/{id}")
-    public ResponseEntity<Role> getRole(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.roleService.findById(id).orElse(null));
+    public ResponseEntity<Role> getRole(@PathVariable("id") Long id) throws IdInvalidException {
+        Optional<Role> role = this.roleService.findById(id);
+        if (!role.isPresent()) {
+            throw new IdInvalidException("Role with id: " + id + " not found");
+        }
+        return ResponseEntity.ok(role.get());
     }
+
     @PostMapping("/roles")
     public ResponseEntity<Role> createRole(@RequestBody Role role)
             throws Exception {
@@ -53,10 +59,10 @@ public class roleController {
     }
 
     @PutMapping("/roles")
-    public ResponseEntity<Role> updateRole( @RequestBody Role role) throws Exception {
+    public ResponseEntity<Role> updateRole(@RequestBody Role role) throws IdInvalidException {
         Role roleExist = this.roleService.findById(role.getId()).orElse(null);
         if (roleExist == null) {
-            throw new Exception("Role with " + role.getId() + " not found");
+            throw new IdInvalidException("Role with id: " + role.getId() + " not found");
         }
         // if(roleExist.getName().equals(role.getName())) {
         // throw new Exception("Role name " + role.getName() + " already exists");
@@ -65,10 +71,10 @@ public class roleController {
     }
 
     @DeleteMapping("/roles/{id}")
-    public ResponseEntity<String> deleteRole(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<String> deleteRole(@PathVariable("id") Long id) throws IdInvalidException {
         Optional<Role> roleExist = this.roleService.findById(id);
         if (!roleExist.isPresent()) {
-            throw new Exception("Role with " + id + " not found");
+            throw new IdInvalidException("Role with id: " + id + " not found");
         }
         this.roleService.deleteRole(id);
         return ResponseEntity.ok("Delete role " + id + " success");

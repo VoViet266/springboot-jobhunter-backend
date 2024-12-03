@@ -43,7 +43,7 @@ public class userController {
 
         Optional<User> user = this.userService.handleGetUserByID(id);
         if (!user.isPresent()) {
-            throw new IdInvalidException("Id invalid");
+            throw new IdInvalidException("User with id: " + id + " not found");
         }
         return ResponseEntity.ok().body(this.userService.convertToResUserDTO(user.get()));
 
@@ -81,18 +81,17 @@ public class userController {
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id, User user)
-            throws Exception {
+            throws IdInvalidException {
         Optional<User> userExist = this.userService.handleGetUserByID(id);
         if (!userExist.isPresent()) {
-            throw new Exception("User not existing");
+            throw new IdInvalidException("User with id: " + id + " not found");
         }
         this.userService.handleDeleteUser(id);
         return ResponseEntity.ok().body("Delete success");
     }
 
     @PutMapping("/users")
-    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed)
-            throws Exception {
+    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User userRed) throws IdInvalidException {
         Optional<User> userExist = this.userService.handleGetUserByID(userRed.getId());
         // if (userRed.getEmail() != null) {
         //     throw new Exception("CAN NOT UPDATE EMAIL");
@@ -101,7 +100,7 @@ public class userController {
             return ResponseEntity.ok()
                     .body(this.userService.convertToResUpdateUserDTO(this.userService.handleUpdateUser(userRed)));
         } else {
-            throw new Exception("User not existing");
+            throw new IdInvalidException("User with id: " + userRed.getId() + " not found");
         }
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -23,10 +23,11 @@ import vn.hoidanit.jobhunter.dto.request.ReqLoginDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
 import vn.hoidanit.jobhunter.entity.User;
-import vn.hoidanit.jobhunter.service.authService;
+import vn.hoidanit.jobhunter.service.authService;               
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
+import vn.hoidanit.jobhunter.service.error.AuthenticationException;
 import vn.hoidanit.jobhunter.service.userService;
-import vn.hoidanit.jobhunter.util.SecurityUtil;
+import vn.hoidanit.jobhunter.util.SecurityUtil;         
 
 @RequestMapping("/api/v1/auth")
 @RestController
@@ -50,7 +51,8 @@ public class authController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) {
+    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) 
+   {
         try {
 
             // Xác thực từ username và password của người dùng và trả về đối tượng
@@ -86,19 +88,19 @@ public class authController {
                     .path("/")
                     .build();
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(restLoginDTO);
-        } catch (AuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username/password supplied");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<ResCreateUserDTO> register(@RequestBody User user)
-            throws IdInvalidException {
+            throws IdInvalidException, AuthenticationException {
 
         // Kiểm tra xem email đã tồn tại
         User existingUserOpt = this.userService.handleGetUserByEmail(user.getEmail());
         if (existingUserOpt != null) {
-            throw new IdInvalidException("Email: " + user.getEmail() +" already exists");
+            throw new AuthenticationException("Email: " + user.getEmail() + " already exists");
         }
         // Tạo mới user và lưu vào database
         User User = new User();
@@ -115,10 +117,10 @@ public class authController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout() {
+    public ResponseEntity<Void> logout() throws AuthenticationException {
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         if (email.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is empty ");
+            throw new AuthenticationException("User not login");
         }
         this.userService.updateUserToken("", email);
         ResponseCookie springCookie = ResponseCookie.from("refresh_token", "")
@@ -146,15 +148,15 @@ public class authController {
         return ResponseEntity.ok(userGetAccount);
     }
 
-    @GetMapping("/refresh-token")
+    @GetMapping("/refresh")
     public ResponseEntity<ResLoginDTO> refreshToken(
-            @CookieValue(name = "refresh_token", defaultValue = "none") String refreshToken) {
+            @CookieValue(name = "refresh_token", defaultValue = "none") String refreshToken) throws AuthenticationException {
         Jwt decodeToken = this.securityUtil.checkValidRefreshToken(refreshToken);
         String email = decodeToken.getClaim("email");
         // SecurityUtil.getCurrentUserLogin().get() : "";
 
         if (refreshToken.equals("none")) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refresh token is empty");
+            throw new AuthenticationException("User not login");
         }
         ResLoginDTO restLoginDTO = new ResLoginDTO();
         User currentUserDB = this.userService.handleGetUserByEmail(email);
@@ -183,7 +185,7 @@ public class authController {
                 .maxAge(refreshTokenExpiration)
                 .path("/")
                 .build();
-        
+
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, resCookies.toString()).body(restLoginDTO);
     }
 }

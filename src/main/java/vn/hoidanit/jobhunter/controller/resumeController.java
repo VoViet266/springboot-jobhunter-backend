@@ -23,6 +23,7 @@ import vn.hoidanit.jobhunter.dto.response.Resume.ResUpdateResumeDTO;
 import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Resume;
 import vn.hoidanit.jobhunter.service.resumeService;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -52,7 +53,6 @@ public class resumeController {
         Resume reqResume = resumeOptional.get();
         reqResume.setStatus(resume.getStatus());
 
-
             // ResUpdateResumeDTO res = new ResUpdateResumeDTO(
             //     reqResume.getId(),
             //     reqResume.getEmail(),
@@ -66,20 +66,20 @@ public class resumeController {
     }
 
     @DeleteMapping("/resumes/{id}")
-    public ResponseEntity<String> deleteResume(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<String> deleteResume(@PathVariable("id") Long id) throws IdInvalidException {
         Optional<Resume> resumeOptional = this.resumeService.getResumeById(id);
         if (!resumeOptional.isPresent()) {
-            throw new Exception("Resume với id = " + id + " không tồn tại");
+            throw new IdInvalidException("Resume with id: " + id + " not found");
         }
         this.resumeService.deleteResume(id);
-        return ResponseEntity.ok("Xóa thành công");
+        return ResponseEntity.ok("Delete resume with id: " + id + " success");
     }
 
     @GetMapping("/resumes/{id}")
-    public ResponseEntity<ResFetchResumeDTO> getResumeById(@Valid @PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<ResFetchResumeDTO> getResumeById(@Valid @PathVariable("id") Long id) throws IdInvalidException {
         Optional<Resume> resumeOptional = this.resumeService.getResumeById(id);
         if (!resumeOptional.isPresent()) {
-            throw new Exception("Resume với id = " + id + " không tồn tại");    
+            throw new IdInvalidException("Resume with id: " + id + " not found");
         }
         ResFetchResumeDTO res = new ResFetchResumeDTO();
         res.setId(resumeOptional.get().getId());

@@ -17,6 +17,7 @@ import com.turkraft.springfilter.boot.Filter;
 import vn.hoidanit.jobhunter.dto.response.page.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.entity.Permission;
 import vn.hoidanit.jobhunter.service.permissionService;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,22 +40,22 @@ public class permissionController {
     }
 
     @PutMapping("/permissions")
-    public ResponseEntity<Permission> updatePermission(@RequestBody Permission permission) throws Exception {
+    public ResponseEntity<Permission> updatePermission(@RequestBody Permission permission) throws IdInvalidException, Exception {
         boolean isPermissionExist = permissionService.isPermissionExist(permission);
 
         if (this.permissionService.getPermissionById(permission.getId()) == null) {
-            throw new Exception("Permission" + permission.getId() + " is not exist");
+            throw new IdInvalidException("Permission" + permission.getId() + " is not exist");
         }
         if (isPermissionExist) {
-            throw new Exception("Permission"+ permission.getId() +" is exist");
+            throw new Exception("Permission is already exist");
         }
         return ResponseEntity.ok(permissionService.updatePermission(permission));
     }
 
     @DeleteMapping("/permissions/{id}")
-    public ResponseEntity<Void> deletePermission(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<Void> deletePermission(@PathVariable("id") Long id) throws IdInvalidException {
         if (this.permissionService.getPermissionById(id) == null) {
-            throw new Exception("Permission" + id +  "is not exist");
+            throw new IdInvalidException("Permission" + id + " is not exist");
         }
         permissionService.deletePermission(id);
         return ResponseEntity.ok().build();
