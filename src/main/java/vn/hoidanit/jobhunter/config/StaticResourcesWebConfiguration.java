@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class StaticResourcesWebConfigurati
+public class StaticResourcesWebConfiguration
         implements WebMvcConfigurer {
     @Value("${hoidanit.upload-file.base-uri}")
     private String baseURI;

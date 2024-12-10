@@ -36,6 +36,7 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -60,12 +61,12 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "/api/v1/jobs").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/jobs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/jobs").permitAll()
-                                .requestMatchers(HttpMethod.PUT,    "/api/v1/jobs").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/jobs").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/jobs").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/companies").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/v1/companies").permitAll() 
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/companies").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/companies/**").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/skills").permitAll()
@@ -94,7 +95,8 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/roles").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/roles/**").permitAll()
 
-                                .requestMatchers("/storage/**").permitAll()
+                                
+                                .requestMatchers(HttpMethod.GET, "/storage/**").permitAll()
 
                 ///// can phai dang nhap
                 ).oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
@@ -114,6 +116,7 @@ public class SecurityConfiguration {
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
     }
+
     // JwtDecoder de giai ma token
     @Bean
     public JwtDecoder jwtDecoder() {

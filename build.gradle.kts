@@ -26,6 +26,8 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
+
+	//devtools for auto reload when code change in development	
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	compileOnly("org.projectlombok:lombok")
