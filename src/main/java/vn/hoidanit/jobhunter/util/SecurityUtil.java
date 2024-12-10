@@ -2,8 +2,6 @@ package vn.hoidanit.jobhunter.util;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.crypto.SecretKey;
@@ -19,6 +17,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
@@ -53,10 +52,6 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
         userToken.setEmail(dto.getUser().getEmail());
 
-        // List<String> listAuthorities = new ArrayList<>();
-        // listAuthorities.add("ROLE_USER_CREATE");
-        // listAuthorities.add("ROLE_USER_UPDATE");
-
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(email)
                 .issuedAt(now)
@@ -70,7 +65,6 @@ public class SecurityUtil {
                 .from(jwsHeader, claims))
                 .getTokenValue();
     }
-
     public String createRefreshToken(String email, ResLoginDTO dto) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
@@ -79,9 +73,7 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
         userToken.setEmail(dto.getUser().getEmail());
 
-        // List<String> listAuthorities = new ArrayList<>();
-        // listAuthorities.add("ROLE_USER_CREATE");
-        // listAuthorities.add("ROLE_USER_UPDATE");
+     
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(email)
                 .issuedAt(now)
@@ -117,7 +109,7 @@ public class SecurityUtil {
                 .build();
         try {
             return jwtDecoder.decode(token);
-        } catch (Exception e) {
+        } catch (JwtException e) {
             System.out.println(">>> JWT Error: " + e.getMessage());
             throw e;
         }

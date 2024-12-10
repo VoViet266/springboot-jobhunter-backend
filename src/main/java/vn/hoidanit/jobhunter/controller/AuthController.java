@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import vn.hoidanit.jobhunter.dto.request.ReqLoginDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
@@ -51,10 +49,8 @@ public class authController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) 
+    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) throws AuthenticationException
    {
-        try {
-
             // Xác thực từ username và password của người dùng và trả về đối tượng
             // Authentication object nếu xác thực thành công
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -88,9 +84,7 @@ public class authController {
                     .path("/")
                     .build();
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(restLoginDTO);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
+       
     }
 
     @PostMapping("/register")

@@ -13,10 +13,10 @@ import vn.hoidanit.jobhunter.entity.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResLoginDTO {
+
+    private UserLogin user;
     @JsonProperty("access_token")
     private String accessToken;
-    private UserLogin user;
-   
 
     @Setter
     @Getter
@@ -27,9 +27,10 @@ public class ResLoginDTO {
         private String name;
         private String email;
         private Role role;
-        
 
     }
+   
+
 
     @Setter
     @Getter

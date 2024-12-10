@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import vn.hoidanit.jobhunter.dto.response.file.ResUploadFileDTO;
+import vn.hoidanit.jobhunter.dto.response.File.ResUploadFileDTO;
 import vn.hoidanit.jobhunter.service.fileService;
 
 @RestController
@@ -47,8 +47,6 @@ public class fileController {
         if (!isAllowed) {
             throw new Exception("File not allowed");
         }
-
-        
         this.fileService.createDirectory(baseURI + folder);
         String uploadFile = this.fileService.store(file, folder);
         ResUploadFileDTO resUploadFileDTO = new ResUploadFileDTO(uploadFile, Instant.now());
