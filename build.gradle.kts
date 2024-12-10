@@ -26,6 +26,10 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
+	// implementation("org.springframework.boot:spring-boot-starter-cache:3.4.0")
+	// implementation("org.springframework.boot:spring-boot-starter-data-redis:3.4.0")
+	// // https://mvnrepository.com/artifact/redis.clients/jedis
+	// implementation("redis.clients:jedis:5.1.5")
 
 	//devtools for auto reload when code change in development	
 	developmentOnly("org.springframework.boot:spring-boot-devtools")

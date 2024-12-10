@@ -3,13 +3,9 @@ package vn.hoidanit.jobhunter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-// Disable Spring Security
-// @SpringBootApplication(exclude = {
-// 		org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
-// 		org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class
-// })
-
+/**
+ * Main class for the Jobhunter Spring Boot application.
+ */
 @SpringBootApplication
 public class JobhunterApplication {
 
