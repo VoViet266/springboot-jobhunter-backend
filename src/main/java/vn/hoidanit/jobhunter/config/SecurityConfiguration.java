@@ -75,8 +75,10 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/skills").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/skills/**").permitAll()
 
+                                .requestMatchers(HttpMethod.GET, "/api/v1/files").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/files/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/files").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/files/delete").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/permissions/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/permissions").permitAll()

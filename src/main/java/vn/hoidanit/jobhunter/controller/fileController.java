@@ -10,6 +10,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class fileController {
     @PostMapping("/files")
     public ResponseEntity<ResUploadFileDTO> uploadFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("folder") String folder) throws IOException, Exception {
+            @RequestParam(value = "folder", defaultValue = "") String folder) throws IOException, Exception {
         if (file.isEmpty()) {
             throw new Exception("File is empty");
         }
@@ -55,8 +56,8 @@ public class fileController {
 
     @GetMapping("/files")
     public ResponseEntity<Resource> downloadFile(
-            @RequestParam("folder") String folder,
-            @RequestParam("fileName") String fileName) throws IOException, Exception {
+        @RequestParam(value = "folder", defaultValue = "") String folder,
+        @RequestParam("fileName") String fileName) throws IOException, Exception {
         {
             if (fileName == null || folder == null) {
                 throw new Exception("File not found");
@@ -74,4 +75,13 @@ public class fileController {
                     .body(resource);
         }
     }
+
+    @DeleteMapping("/files/delete")
+    public ResponseEntity<String> deleteFile(
+            @RequestParam(value = "folder", defaultValue = "") String folder,
+            @RequestParam("fileName") String fileName) throws IOException, Exception {
+        this.fileService.deleteFile(folder, fileName);
+        return ResponseEntity.ok("Delete file " + folder + fileName +" success");
+    }
+
 }

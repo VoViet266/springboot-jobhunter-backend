@@ -69,6 +69,19 @@ public class fileService {
         return new InputStreamResource(new FileInputStream(file));
     }
 
+    public void deleteFile(String folder, String fileName) throws Exception {
+        // delete file
+        URI uri = new URI(baseURI + folder + "/" + fileName);
+        Path path = Paths.get(uri);
+        File file = new File(path.toString());
+        if (file.exists() && !file.isDirectory()) {
+            file.delete();
+            System.out.println(">>> File deleted: " + path);
+        }
+        
+    }
+
+
 
     
 }

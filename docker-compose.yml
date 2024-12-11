@@ -17,3 +17,8 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
       - SPRING_JPA_SHOW_SQL=true
+
+      ## build the image: docker-compose build 
+      ## run the container: docker-compose up -d
+      ## stop the container: docker-compose down
+
