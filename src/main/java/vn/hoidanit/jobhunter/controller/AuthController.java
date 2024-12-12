@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -21,11 +20,11 @@ import vn.hoidanit.jobhunter.dto.request.ReqLoginDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
 import vn.hoidanit.jobhunter.entity.User;
-import vn.hoidanit.jobhunter.service.authService;               
+import vn.hoidanit.jobhunter.service.authService;
 import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.error.AuthenticationException;
 import vn.hoidanit.jobhunter.service.userService;
-import vn.hoidanit.jobhunter.util.SecurityUtil;         
+import vn.hoidanit.jobhunter.util.SecurityUtil;
 
 @RequestMapping("/api/v1/auth")
 @RestController
@@ -49,42 +48,42 @@ public class authController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) throws AuthenticationException
-   {
-            // Xác thực từ username và password của người dùng và trả về đối tượng
-            // Authentication object nếu xác thực thành công
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    loginDto.getUsername(),
-                    loginDto.getPassword());
-            Authentication authentication = authenticationManagerBuilder
-                    .getObject()
-                    .authenticate(authenticationToken);
+    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) throws AuthenticationException {
+        // Xác thực từ username và password của người dùng và trả về đối tượng
+        // Authentication object nếu xác thực thành công
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(),
+                loginDto.getPassword());
+        Authentication authentication = authenticationManagerBuilder
+                .getObject()
+                .authenticate(authenticationToken);
 
-            ResLoginDTO restLoginDTO = new ResLoginDTO();
-            User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
-            if (currentUser != null) {
-                ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
-                        currentUser.getId(),
-                        currentUser.getUsername(),
-                        currentUser.getEmail(),
-                        currentUser.getRole());
-                restLoginDTO.setUser(userLogin);
-            }
-            // Tạo access token và refresh token
-            String accesss_Token = this.securityUtil.createAccessToken(authentication.getName(), restLoginDTO);
-            // Set access token vào đối tượng ResLoginDTO để trả về cho người dùng
-            restLoginDTO.setAccessToken(accesss_Token);
-            String refresh_token = this.securityUtil.createRefreshToken(loginDto.getUsername(), restLoginDTO);
-            // Cập nhật refresh token vào database
-            this.userService.updateUserToken(refresh_token, loginDto.getUsername());
-            ResponseCookie springCookie = ResponseCookie.from("refresh_token", refresh_token)
-                    .httpOnly(true)
-                    .secure(true)
-                    .maxAge(refreshTokenExpiration)
-                    .path("/")
-                    .build();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(restLoginDTO);
-       
+    
+        ResLoginDTO restLoginDTO = new ResLoginDTO();
+        User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
+        if (currentUser != null) {
+            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+                    currentUser.getId(),
+                    currentUser.getUsername(),
+                    currentUser.getEmail(),
+                    currentUser.getRole());
+            restLoginDTO.setUser(userLogin);
+        }
+        // Tạo access token và refresh token
+        String accesss_Token = this.securityUtil.createAccessToken(authentication.getName(), restLoginDTO);
+        // Set access token vào đối tượng ResLoginDTO để trả về cho người dùng
+        restLoginDTO.setAccessToken(accesss_Token);
+        String refresh_token = this.securityUtil.createRefreshToken(loginDto.getUsername(), restLoginDTO);
+        // Cập nhật refresh token vào database
+        this.userService.updateUserToken(refresh_token, loginDto.getUsername());
+        ResponseCookie springCookie = ResponseCookie.from("refresh_token", refresh_token)
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(refreshTokenExpiration)
+                .path("/")
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(restLoginDTO);
+
     }
 
     @PostMapping("/register")
@@ -144,7 +143,8 @@ public class authController {
 
     @GetMapping("/refresh")
     public ResponseEntity<ResLoginDTO> refreshToken(
-            @CookieValue(name = "refresh_token", defaultValue = "none") String refreshToken) throws AuthenticationException {
+            @CookieValue(name = "refresh_token", defaultValue = "none") String refreshToken)
+            throws AuthenticationException {
         Jwt decodeToken = this.securityUtil.checkValidRefreshToken(refreshToken);
         String email = decodeToken.getClaim("email");
         // SecurityUtil.getCurrentUserLogin().get() : "";

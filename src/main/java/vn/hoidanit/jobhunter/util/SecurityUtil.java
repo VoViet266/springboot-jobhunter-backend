@@ -2,6 +2,8 @@ package vn.hoidanit.jobhunter.util;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.crypto.SecretKey;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import com.nimbusds.jose.util.Base64;
 
 import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
+import vn.hoidanit.jobhunter.entity.Role;
 
 @Service
 public class SecurityUtil {
@@ -52,12 +55,15 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
         userToken.setEmail(dto.getUser().getEmail());
 
+        String roleName = "ROLE_" + dto.getUser().getRole().getName().toUpperCase();
+        List<String> roles = Collections.singletonList(roleName);
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(email)
                 .issuedAt(now)
                 .expiresAt(validity)
                 .claim("User", userToken)
-                // .claim("authorities", listAuthorities)
+                .claim("roles", roles)
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -65,6 +71,7 @@ public class SecurityUtil {
                 .from(jwsHeader, claims))
                 .getTokenValue();
     }
+
     public String createRefreshToken(String email, ResLoginDTO dto) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
@@ -73,13 +80,15 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
         userToken.setEmail(dto.getUser().getEmail());
 
-     
+        String roleName = "ROLE_" + dto.getUser().getRole().getName();
+        List<String> roles = Collections.singletonList(roleName);
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(email)
                 .issuedAt(now)
                 .expiresAt(validity)
                 .claim("User", userToken)
-                // .claim("authorities", listAuthorities)
+                .claim("roles", roles)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(
