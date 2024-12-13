@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import vn.hoidanit.jobhunter.dto.request.ReqLoginDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
 import vn.hoidanit.jobhunter.entity.User;
 import vn.hoidanit.jobhunter.service.authService;
-import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.error.AuthenticationException;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 import vn.hoidanit.jobhunter.service.userService;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
 
@@ -58,7 +59,6 @@ public class authController {
                 .getObject()
                 .authenticate(authenticationToken);
 
-    
         ResLoginDTO restLoginDTO = new ResLoginDTO();
         User currentUser = this.userService.handleGetUserByEmail(loginDto.getUsername());
         if (currentUser != null) {
@@ -66,7 +66,8 @@ public class authController {
                     currentUser.getId(),
                     currentUser.getUsername(),
                     currentUser.getEmail(),
-                    currentUser.getRole());
+                    new ResLoginDTO.RoleUser(currentUser.getRole().getId(), currentUser.getRole().getName()));
+
             restLoginDTO.setUser(userLogin);
         }
         // Tạo access token và refresh token
@@ -135,7 +136,7 @@ public class authController {
             userLogin.setId(userCurent.getId());
             userLogin.setEmail(userCurent.getEmail());
             userLogin.setName(userCurent.getUsername());
-            userLogin.setRole(userCurent.getRole());
+            userLogin.setRole(new ResLoginDTO.RoleUser(userCurent.getRole().getId(), userCurent.getRole().getName()));
             userGetAccount.setUser(userLogin);
         }
         return ResponseEntity.ok(userGetAccount);
@@ -160,7 +161,7 @@ public class authController {
                     currentUserDB.getId(),
                     currentUserDB.getUsername(),
                     currentUserDB.getEmail(),
-                    currentUserDB.getRole());
+                    new ResLoginDTO.RoleUser(currentUserDB.getRole().getId(), currentUserDB.getRole().getName()));
             restLoginDTO.setUser(userLogin);
         }
         // Tạo access token và refresh token

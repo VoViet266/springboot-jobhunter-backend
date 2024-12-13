@@ -85,6 +85,7 @@ public class userService {
     public User handleGetUserByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
+
     public User getUserByRefeshTokenAndEmail(String email, String refreshToken) {
         return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
     }
@@ -106,7 +107,7 @@ public class userService {
                 Optional<Role> roleOptional = this.roleService.findById(updatedUser.getRole().getId());
                 currentUser.setRole(roleOptional != null ? roleOptional.get() : null);
             }
-            if(updatedUser.getResumes() != null) {
+            if (updatedUser.getResumes() != null) {
                 currentUser.setResumes(updatedUser.getResumes());
             }
             currentUser = this.userRepository.save(currentUser);
@@ -179,6 +180,7 @@ public class userService {
         }
         return resUserDTO;
     }
+
     public User handleCreateUser(User user) {
         if (user.getCompany() != null) {
             Optional<Company> companyOptional = this.companyService.findById(user.getCompany().getId());
@@ -186,7 +188,7 @@ public class userService {
         }
         if (user.getRole() != null) {
             Optional<Role> roleOptional = this.roleService.findById(user.getRole().getId());
-          user.setRole(roleOptional != null ? roleOptional.get() : null);
+            user.setRole(roleOptional != null ? roleOptional.get() : null);
         }
         return this.userRepository.save(user);
     }

@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import com.nimbusds.jose.util.Base64;
 
 import vn.hoidanit.jobhunter.dto.response.User.ResLoginDTO;
-import vn.hoidanit.jobhunter.entity.Role;
 
 @Service
 public class SecurityUtil {
@@ -43,6 +42,7 @@ public class SecurityUtil {
 
     @Value("${hoidanit.jwt.access-token-validity-in-seconds}")
     private Long accessTokenExpiration;
+    
     @Value("${hoidanit.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
